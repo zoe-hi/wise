@@ -54,11 +54,20 @@ const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
 });
 
 export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
-    const [plans, setPlans] = useState<PlanSummary[]>(initialPlans);
+    const [plans, setPlans] = useState<PlanSummary[]>(
+        [...initialPlans].sort(
+            (a, b) => new Date(b.convertBy).getTime() - new Date(a.convertBy).getTime()
+        )
+    );
     const [isNewPlanOpen, setIsNewPlanOpen] = useState(false);
 
     const handlePlanCreated = (newPlan: Plan) => {
-        setPlans((prev) => [newPlan, ...prev]);
+        setPlans((prev) => {
+            const updated = [...prev, newPlan];
+            return updated.sort(
+                (a, b) => new Date(b.convertBy).getTime() - new Date(a.convertBy).getTime()
+            );
+        });
         setIsNewPlanOpen(false);
     };
 
