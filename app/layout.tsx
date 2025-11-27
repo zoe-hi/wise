@@ -76,8 +76,19 @@ export default function RootLayout({
               </Link>
             </nav>
           </aside>
+          {/* Top Bar / Profile Placeholder */}
+          <div className="flex-1 overflow-y-auto">
+            <div className="sticky top-0 z-10 bg-gray-100 pt-8 pb-4 px-8">
+              <div className="flex justify-end">
+                <div className="flex items-center space-x-3 p-2 bg-white rounded-full shadow-md border border-gray-200">
+                  <span className="text-sm font-semibold text-gray-800">Wise Business</span>
+                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">N</div>
+                </div>
+              </div>
+            </div>
 
-          {children}
+            {children}
+          </div>
         </div>
       </body>
     </html>

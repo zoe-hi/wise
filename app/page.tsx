@@ -2,15 +2,7 @@ import { SvgIcon } from './components/SvgIcon';
 
 export default function Home() {
   return (
-    <div className="flex-1 overflow-y-auto p-8">
-      {/* Top Bar / Profile Placeholder */}
-      <div className="flex justify-end mb-8">
-        <div className="flex items-center space-x-3 p-2 bg-white rounded-full shadow-md border border-gray-200">
-          <span className="text-sm font-semibold text-gray-800">Wise Business</span>
-          <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">N</div>
-        </div>
-      </div>
-
+    <div className="w-full px-8">
       {/* Total Balance */}
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-gray-700">Total balance</h2>
