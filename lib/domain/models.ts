@@ -37,7 +37,7 @@ export type Plan = {
 
   cancelledAt?: string;
 
-  rawRuleJson?: any;
+  rawRuleJson?: unknown;
 };
 
 export type PlanStepType = "CHUNK" | "TRIGGER";
