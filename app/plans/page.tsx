@@ -40,7 +40,7 @@ export default function PlansPage() {
   }));
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-16">
+    <div className="min-h-screen bg-slate-50 pb-16 w-full">
       <div className="mx-auto max-w-6xl px-6 pt-12">
         <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
