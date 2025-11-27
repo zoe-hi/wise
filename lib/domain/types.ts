@@ -16,4 +16,5 @@ export type Rule = {
   sourceCurrency: string;
   strategy: Strategy;
   netting: Netting;
+  name?: string;
 };
