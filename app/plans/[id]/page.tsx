@@ -1,9 +1,8 @@
 import { notFound } from "next/navigation";
 import {
-  getPlanActivity,
-  getPlanById,
-  getPlanSteps,
-} from "../../data/demoPlanDetails";
+  getPlanDetailAction,
+  getPlanActivityAction,
+} from "../../servers/planActions";
 
 const currencyFormatter = (currency: string) =>
   new Intl.NumberFormat("en-GB", {
@@ -33,6 +32,11 @@ const statusStyles = {
     dot: "bg-rose-500",
     label: "Cancelled",
   },
+  COMPLETED: {
+    badge: "border border-blue-100 bg-blue-50 text-blue-700",
+    dot: "bg-blue-500",
+    label: "Completed",
+  },
 } as const;
 
 type PageProps = {
@@ -41,14 +45,18 @@ type PageProps = {
 
 export default async function PlanDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const plan = getPlanById(id);
 
-  if (!plan) {
+  let planData;
+  let activity;
+
+  try {
+    planData = await getPlanDetailAction(id);
+    activity = await getPlanActivityAction(id);
+  } catch (e) {
     return notFound();
   }
 
-  const steps = getPlanSteps(plan.id);
-  const activity = getPlanActivity(plan.id);
+  const { plan, steps } = planData;
   const amountFormatter = currencyFormatter(plan.targetCurrency);
   const statusStyle = statusStyles[plan.status];
 
@@ -192,9 +200,8 @@ function SummaryItem({ label, value, emphasis }: SummaryItemProps) {
         {label}
       </p>
       <p
-        className={`mt-2 text-lg font-semibold ${
-          emphasis ? "text-slate-900" : "text-slate-800"
-        }`}
+        className={`mt-2 text-lg font-semibold ${emphasis ? "text-slate-900" : "text-slate-800"
+          }`}
       >
         {value}
       </p>

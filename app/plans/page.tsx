@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { demoPlans } from "../data/demoPlans";
+import { listPlansAction } from "../servers/planActions";
 
 const statusStyles: Record<
-  (typeof demoPlans)[number]["status"],
+  "DRAFT" | "ACTIVE" | "CANCELLED" | "COMPLETED",
   { badge: string; dot: string }
 > = {
   DRAFT: {
@@ -16,6 +16,10 @@ const statusStyles: Record<
   CANCELLED: {
     badge: "border border-rose-100 bg-rose-50 text-rose-700",
     dot: "bg-rose-500",
+  },
+  COMPLETED: {
+    badge: "border border-blue-100 bg-blue-50 text-blue-700",
+    dot: "bg-blue-500",
   },
 };
 
@@ -31,8 +35,10 @@ const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
   timeStyle: "short",
 });
 
-export default function PlansPage() {
-  const plans = demoPlans.map((plan) => ({
+export default async function PlansPage() {
+  const rawPlans = await listPlansAction();
+
+  const plans = rawPlans.map((plan) => ({
     ...plan,
     formattedNetAmount: currencyFormatter(plan.targetCurrency).format(
       plan.netAmount,
