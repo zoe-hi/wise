@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRole, Role } from "../contexts/RoleContext";
+import { SvgIcon } from './SvgIcon';
 
 export function RoleSwitcher() {
     const { role, setRole } = useRole();
@@ -46,12 +47,17 @@ export function RoleSwitcher() {
                                 setRole(r);
                                 setIsOpen(false);
                             }}
-                            className={`block w-full px-4 py-2 text-left text-sm ${role === r
-                                    ? "bg-teal-50 text-teal-700"
-                                    : "text-gray-700 hover:bg-gray-50"
-                                }`}
+                            className="block w-full px-4 py-2 text-left text-sm hover:bg-teal-50 hover:text-teal-700 text-gray-700 hover:bg-gray-50"
                         >
+                          <div className="flex items-center space-x-2">
                             {r}
+                            {role === r && (
+                              <SvgIcon
+                                path="M20 6 9 17l-5-5"
+                                className="w-6 h-6 text-green-500 pl-2"
+                              />
+                            )}
+                          </div>
                         </button>
                     ))}
                 </div>
