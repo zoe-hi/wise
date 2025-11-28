@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Plan, PlanStatus } from "../../lib/domain/models";
 import { RuleBuilderModal } from "./RuleBuilderModal";
+import { useRole } from "../contexts/RoleContext";
 
 type PlanSummary = {
     id: string;
@@ -54,6 +55,7 @@ const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
 });
 
 export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
+    const { role } = useRole();
     const [plans, setPlans] = useState<PlanSummary[]>(
         [...initialPlans].sort(
             (a, b) => new Date(b.convertBy).getTime() - new Date(a.convertBy).getTime()
@@ -71,6 +73,8 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
         setIsNewPlanOpen(false);
     };
 
+    const canCreatePlans = role !== "VIEWER";
+
     return (
         <div className="min-h-screen bg-slate-100 pb-16">
             <div className="mx-auto max-w-6xl px-6 pt-12">
@@ -83,12 +87,23 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
                             Track your planned conversions and their deadlines in one place.
                         </p>
                     </div>
-                    <button
-                        onClick={() => setIsNewPlanOpen(true)}
-                        className="inline-flex items-center justify-center rounded-full bg-teal-500 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-teal-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-500"
-                    >
-                        New plan
-                    </button>
+                    <div className="flex flex-col items-end gap-2">
+                        <button
+                            onClick={() => canCreatePlans && setIsNewPlanOpen(true)}
+                            disabled={!canCreatePlans}
+                            className={`inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${canCreatePlans
+                                ? "bg-teal-500 hover:bg-teal-600 focus-visible:outline-teal-500"
+                                : "cursor-not-allowed bg-slate-300 opacity-50"
+                                }`}
+                        >
+                            New plan
+                        </button>
+                        {!canCreatePlans && (
+                            <p className="text-xs text-slate-500">
+                                View-only role: ask an Owner or Planner to create plans.
+                            </p>
+                        )}
+                    </div>
                 </header>
 
                 <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">

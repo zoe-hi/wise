@@ -1,26 +1,26 @@
 "use client";
 
-import { useState } from "react";
-import { Plan, PlanStep, User } from "../../lib/domain/models";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Plan, PlanStep } from "../../lib/domain/models";
 import { Rule } from "../../lib/domain/types";
 import {
     createPlanAction,
     previewPlanAction,
+    activatePlanAction,
 } from "../servers/planActions";
+import { getSettingsAction } from "../servers/settingsActions";
+import { useRole } from "../contexts/RoleContext";
 
 type RuleBuilderModalProps = {
     onClose: () => void;
     onSave: (plan: Plan) => void;
 };
 
-// Demo user for now
-const DEMO_USER: User = {
-    id: "user-1",
-    name: "Demo User",
-    role: "OWNER",
-};
-
 export function RuleBuilderModal({ onClose, onSave }: RuleBuilderModalProps) {
+    const { user, role } = useRole();
+    const router = useRouter();
+    const [approvalThreshold, setApprovalThreshold] = useState<number>(25000);
     const [formData, setFormData] = useState({
         name: "",
         targetCurrency: "USD",
@@ -40,6 +40,35 @@ export function RuleBuilderModal({ onClose, onSave }: RuleBuilderModalProps) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    // Fetch approval threshold
+    useEffect(() => {
+        getSettingsAction().then((settings) => {
+            setApprovalThreshold(settings.approvalThreshold);
+        });
+    }, []);
+
+    // Calculate net amount
+    const netAmount = Math.max(
+        0,
+        Number(formData.amount) - Number(formData.existingBalance) - Number(formData.expectedInflows)
+    );
+
+    // Role-based flags
+    const isViewer = role === "VIEWER";
+    const isOwner = role === "OWNER";
+    const isPlanner = role === "PLANNER";
+
+    const canPlannerSelfStart =
+        isPlanner &&
+        netAmount > 0 &&
+        approvalThreshold != null &&
+        netAmount <= approvalThreshold;
+
+    const isOverThreshold =
+        approvalThreshold != null && netAmount > approvalThreshold;
+
+    const exceedsThreshold = isPlanner && isOverThreshold;
 
     // Helper to get tomorrow at 10:00 local time
     function getDefaultConvertBy() {
@@ -106,7 +135,7 @@ export function RuleBuilderModal({ onClose, onSave }: RuleBuilderModalProps) {
         setError(null);
         try {
             const rule = buildRule();
-            const result = await previewPlanAction(rule, DEMO_USER);
+            const result = await previewPlanAction(rule, user);
             setPreview(result);
         } catch (e) {
             setError((e as Error).message);
@@ -124,7 +153,7 @@ export function RuleBuilderModal({ onClose, onSave }: RuleBuilderModalProps) {
         setError(null);
         try {
             const rule = buildRule();
-            const { plan } = await createPlanAction(rule, DEMO_USER);
+            const { plan } = await createPlanAction(rule, user);
             onSave(plan);
         } catch (e) {
             setError((e as Error).message);
@@ -132,6 +161,48 @@ export function RuleBuilderModal({ onClose, onSave }: RuleBuilderModalProps) {
             setIsLoading(false);
         }
     };
+
+    const handlePrimarySubmit = async () => {
+        if (isViewer) {
+            return; // Button should be disabled anyway
+        }
+
+        if (!formData.convertBy) {
+            setError("Please select a 'Convert by' date.");
+            return;
+        }
+
+        setIsLoading(true);
+        setError(null);
+        try {
+            const rule = buildRule();
+            const { plan } = await createPlanAction(rule, user);
+
+            // Conditional activation
+            if (isOwner || canPlannerSelfStart) {
+                await activatePlanAction(plan.id, user);
+            }
+
+            // Navigate to plan detail page
+            router.push(`/plans/${plan.id}`);
+        } catch (e) {
+            setError((e as Error).message);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Dynamic primary button label
+    let primaryLabel = "Save as draft";
+    if (isViewer) {
+        primaryLabel = "Save as draft"; // disabled
+    } else if (isOwner) {
+        primaryLabel = "Approve & start plan";
+    } else if (canPlannerSelfStart) {
+        primaryLabel = "Save & start plan";
+    } else if (isPlanner && isOverThreshold) {
+        primaryLabel = "Save as draft";
+    }
 
     const currencyFormatter = new Intl.NumberFormat("en-GB", {
         style: "currency",
@@ -142,8 +213,11 @@ export function RuleBuilderModal({ onClose, onSave }: RuleBuilderModalProps) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-4 backdrop-blur-sm">
             <div className="my-8 w-full max-w-3xl rounded-2xl bg-white shadow-xl">
-                <div className="border-b border-slate-100 px-6 py-4">
+                <div className="border-b border-slate-100 px-6 py-4 flex justify-between items-center">
                     <h2 className="text-xl font-semibold text-slate-900">New Plan</h2>
+                    <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-1 rounded-full">
+                        Creating as {role}
+                    </span>
                 </div>
 
                 <div className="grid gap-8 p-6 lg:grid-cols-2">
@@ -393,6 +467,19 @@ export function RuleBuilderModal({ onClose, onSave }: RuleBuilderModalProps) {
                     </div>
                 </div>
 
+
+                {exceedsThreshold && (
+                    <div className="border-t border-slate-100 px-6 py-4">
+                        <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                            <p className="text-sm text-amber-800">
+                                ⚠️ This plan exceeds the approval threshold of €
+                                {approvalThreshold.toLocaleString("en-GB")}. Ask an Owner to
+                                approve and start it.
+                            </p>
+                        </div>
+                    </div>
+                )}
+
                 <div className="flex justify-end gap-3 border-t border-slate-100 px-6 py-4">
                     <button
                         onClick={onClose}
@@ -402,17 +489,17 @@ export function RuleBuilderModal({ onClose, onSave }: RuleBuilderModalProps) {
                     </button>
                     <button
                         onClick={handlePreview}
-                        disabled={isLoading}
-                        className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                        disabled={isLoading || isViewer}
+                        className="rounded-full border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Preview plan
                     </button>
                     <button
-                        onClick={handleSave}
-                        disabled={isLoading}
-                        className="rounded-full bg-teal-500 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-600 disabled:opacity-50"
+                        onClick={handlePrimarySubmit}
+                        disabled={isLoading || isViewer}
+                        className="rounded-full bg-teal-500 px-4 py-2 text-sm font-semibold text-white hover:bg-teal-600 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                        Save as draft
+                        {primaryLabel}
                     </button>
                 </div>
             </div>

@@ -5,6 +5,8 @@ import "./globals.css";
 import Link from 'next/link';
 import Image from 'next/image';
 import { SvgIcon } from './components/SvgIcon';
+import { RoleProvider } from "./contexts/RoleContext";
+import { RoleSwitcher } from "./components/RoleSwitcher";
 
 const navItems = [
   { name: 'Home', href: '/', path: 'M3 12h18' },
@@ -40,29 +42,30 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex h-screen bg-gray-100">
+        <RoleProvider>
+          <div className="flex h-screen bg-gray-100">
 
-          {/* 1. Sidebar */}
-          <aside className="w-64 bg-white border-r border-gray-200 flex flex-col p-4">
-            <div className="mb-8">
-              <SvgIcon path="M10 20l-6-6 6-6M4 14h14" className="w-8 h-8 text-green-700 inline-block mr-2" />
-              <span className="text-2xl font-bold text-green-700">wise</span>
-            </div>
+            {/* 1. Sidebar */}
+            <aside className="w-64 bg-white border-r border-gray-200 flex flex-col p-4">
+              <div className="mb-8">
+                <SvgIcon path="M10 20l-6-6 6-6M4 14h14" className="w-8 h-8 text-green-700 inline-block mr-2" />
+                <span className="text-2xl font-bold text-green-700">wise</span>
+              </div>
 
-            <nav className="space-y-1">
-              {navItems.map((item) => (
+              <nav className="space-y-1">
+                {navItems.map((item) => (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className="flex items-center space-x-3 p-3 text-gray-600 hover:bg-gray-50 rounded-lg cursor-pointer transition"
+                  >
+                    <SvgIcon path={item.path} />
+                    <span>{item.name}</span>
+                  </Link>
+                ))}
                 <Link
-                  key={item.name}
-                  href={item.href}
-                  className="flex items-center space-x-3 p-3 text-gray-600 hover:bg-gray-50 rounded-lg cursor-pointer transition"
-                >
-                  <SvgIcon path={item.path} />
-                  <span>{item.name}</span>
-                </Link>
-              ))}
-              <Link
-                href="/plans"
-                className="flex items-center space-x-3 p-3 text-gray-600 hover:bg-gray-200 rounded-lg cursor-pointer font-bold"
+                  href="/plans"
+                  className="flex items-center space-x-3 p-3 text-gray-600 hover:bg-gray-200 rounded-lg cursor-pointer font-bold"
                 >
                   <div className="w-6 h-6 relative flex items-center justify-center">
                     <Image
@@ -72,25 +75,24 @@ export default function RootLayout({
                       height={24}
                     />
                   </div>
-                <span>Convert Wisely</span>
-              </Link>
-            </nav>
-          </aside>
-          {/* Top Bar / Profile Placeholder */}
-          <div className="flex-1 overflow-y-auto">
-            <div className="sticky top-0 z-10 bg-gray-100 pt-8 pb-4 px-8">
-              <div className="flex justify-end">
-                <div className="flex items-center space-x-3 p-2 bg-white rounded-full shadow-md border border-gray-200">
-                  <span className="text-sm font-semibold text-gray-800">Wise Business</span>
-                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">N</div>
+                  <span>Convert Wisely</span>
+                </Link>
+              </nav>
+            </aside>
+            {/* Top Bar / Profile Placeholder */}
+            <div className="flex-1 overflow-y-auto">
+              <div className="sticky top-0 z-10 bg-gray-100 pt-8 pb-4 px-8">
+                <div className="flex justify-end">
+                  <RoleSwitcher />
                 </div>
               </div>
-            </div>
 
-            {children}
+              {children}
+            </div>
           </div>
-        </div>
+        </RoleProvider>
       </body>
     </html>
   );
 }
+
