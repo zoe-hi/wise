@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Plan, ActivityLog } from "../../../lib/domain/models";
+import { Plan, ActivityLog, PlanStep } from "../../../lib/domain/models";
 import { useRole } from "../../contexts/RoleContext";
 import {
     activatePlanAction,
@@ -11,6 +11,7 @@ import {
 
 type PlanDetailClientProps = {
     plan: Plan;
+    steps: PlanStep[];
     activity: ActivityLog[];
     approvalThreshold: number;
 };
@@ -45,6 +46,7 @@ const statusStyles = {
 
 export function PlanDetailClient({
     plan,
+    steps,
     activity,
     approvalThreshold,
 }: PlanDetailClientProps) {
@@ -161,17 +163,14 @@ export function PlanDetailClient({
     };
 
     const statusStyle = statusStyles[plan.status];
+    const amountFormatter = new Intl.NumberFormat("en-GB", {
+        style: "currency",
+        currency: plan.targetCurrency,
+        maximumFractionDigits: 0,
+    });
 
     return (
-        <div className="space-y-4">
-            {/* Threshold banner */}
-            <div className="rounded-lg border border-blue-100 bg-blue-50 p-3">
-                <p className="text-sm text-blue-800">
-                    Owner approval required for plans above €
-                    {approvalThreshold.toLocaleString("en-GB")}.
-                </p>
-            </div>
-
+        <div className="space-y-6">
             {/* Action button area */}
             <div className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
                 <div className="flex items-center gap-3">
@@ -190,37 +189,73 @@ export function PlanDetailClient({
                 </div>
             </div>
 
-            {/* Activity log */}
-            <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                <h3 className="text-lg font-semibold text-slate-900">
-                    Activity log
-                </h3>
-                <ul className="mt-4 space-y-3">
-                    {[...activity].reverse().map((entry) => (
-                        <li
-                            key={entry.id}
-                            className="rounded-lg border border-slate-100 bg-slate-50/70 p-4"
-                        >
-                            <div className="flex items-start justify-between">
-                                <div>
-                                    <p className="text-sm font-semibold text-slate-900">
-                                        {entry.userName}{" "}
-                                        <span className="text-xs font-medium text-slate-500">
-                                            ({entry.userRole})
+            {/* Two-column grid: Timeline left, Activity log right */}
+            <div className="grid gap-6 lg:grid-cols-2">
+                {/* Plan timeline */}
+                <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                        Plan timeline
+                    </h3>
+                    <ol className="mt-4 space-y-4">
+                        {steps.map((step, index) => (
+                            <li
+                                key={step.id}
+                                className="flex gap-4 rounded-xl border border-slate-100 bg-slate-50/80 p-4"
+                            >
+                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-semibold text-slate-900 shadow-sm">
+                                    {index + 1}
+                                </div>
+                                <div className="flex-1">
+                                    <div className="flex flex-wrap items-center gap-2">
+                                        <p className="text-sm font-semibold text-slate-900">
+                                            {amountFormatter.format(step.targetAmount)}{" "}
+                                            {step.targetCurrency}
+                                        </p>
+                                        <span className="text-xs text-slate-500">
+                                            {dateTimeFormatter.format(new Date(step.when))}
                                         </span>
-                                    </p>
-                                    <p className="text-sm text-slate-700">
-                                        {entry.message}
+                                    </div>
+                                    <p className="mt-2 text-sm text-slate-700">
+                                        {step.explanation}
                                     </p>
                                 </div>
-                                <p className="text-xs text-slate-500">
-                                    {dateTimeFormatter.format(new Date(entry.createdAt))}
-                                </p>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </section>
+                            </li>
+                        ))}
+                    </ol>
+                </section>
+
+                {/* Activity log */}
+                <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h3 className="text-lg font-semibold text-slate-900">
+                        Activity log
+                    </h3>
+                    <ul className="mt-4 space-y-3">
+                        {[...activity].reverse().map((entry) => (
+                            <li
+                                key={entry.id}
+                                className="rounded-lg border border-slate-100 bg-slate-50/70 p-4"
+                            >
+                                <div className="flex items-start justify-between">
+                                    <div>
+                                        <p className="text-sm font-semibold text-slate-900">
+                                            {entry.userName}{" "}
+                                            <span className="text-xs font-medium text-slate-500">
+                                                ({entry.userRole})
+                                            </span>
+                                        </p>
+                                        <p className="text-sm text-slate-700">
+                                            {entry.message}
+                                        </p>
+                                    </div>
+                                    <p className="text-xs text-slate-500">
+                                        {dateTimeFormatter.format(new Date(entry.createdAt))}
+                                    </p>
+                                </div>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            </div>
         </div>
     );
 }

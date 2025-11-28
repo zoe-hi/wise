@@ -91,44 +91,11 @@ export default async function PlanDetailPage({ params }: PageProps) {
         <div className="mb-6">
           <PlanDetailClient
             plan={plan}
+            steps={steps}
             activity={activity}
             approvalThreshold={settings.approvalThreshold}
           />
         </div>
-
-        <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-slate-900">
-              Plan timeline
-            </h3>
-          </div>
-          <ol className="mt-4 space-y-4">
-            {steps.map((step, index) => (
-              <li
-                key={step.id}
-                className="flex gap-4 rounded-xl border border-slate-100 bg-slate-50/80 p-4"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-semibold text-slate-900 shadow-sm">
-                  {index + 1}
-                </div>
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <p className="text-sm font-semibold text-slate-900">
-                      {amountFormatter.format(step.targetAmount)}{" "}
-                      {step.targetCurrency}
-                    </p>
-                    <span className="text-xs text-slate-500">
-                      {dateTimeFormatter.format(new Date(step.when))}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm text-slate-700">
-                    {step.explanation}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ol>
-        </section>
       </div>
     </div>
   );
