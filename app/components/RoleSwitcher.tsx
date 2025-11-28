@@ -35,7 +35,7 @@ export function RoleSwitcher() {
                 <div className="flex h-8 w-8 items-center justify-center rounded-full bg-teal-100 text-teal-700 font-bold">
                     {role.charAt(0)}
                 </div>
-            </button>sss
+            </button>
 
             {isOpen && (
                 <div className="absolute right-0 mt-2 w-48 rounded-md border border-gray-100 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5">
