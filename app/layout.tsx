@@ -58,7 +58,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <div className="w-6 h-6 relative flex items-center justify-center">
                     <Image src="/exchange.png" alt="Currency Exchange Icon" width={24} height={24} />
                   </div>
-                  <span>Convert Wisely</span>
+                  <span>Plan Wisely</span>
                 </Link>
               </nav>
             </aside>

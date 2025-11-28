@@ -359,7 +359,8 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                     <button
                                         type="button"
                                         onClick={() => setShowPaymentMethodModal(true)}
-                                        className="w-full flex items-center justify-between p-3 border-2 border-slate-300 rounded-lg hover:border-slate-400 transition"
+                                      className="w-full flex items-center justify-between p-3 border-2 bg-[hsl(90, 1%, 64%)] border-slate-300 rounded-lg hover:border-slate-400 hover:bg-[hsl(97,72%,67%)] transition"
+
                                     >
                                         <div className="flex items-center gap-3">
                                             {formData.paymentMethod === "pool" ? (
@@ -369,7 +370,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                                         <div className="text-sm font-semibold text-slate-800">
                                                             Payment Pool
                                                         </div>
-                                                        <div className="text-xs text-[hsl(97,72%,67%)]">
+                                                        <div className="text-xs text-[hsla(0, 0%, 36%, 1.00)]">
                                                             {currentFee.toFixed(2)} {formData.sourceCurrency} fee • by 5 PM
                                                         </div>
                                                     </div>
@@ -435,15 +436,15 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                             <div className="font-semibold text-[hsl(122.5,92.08%,19.8%)] mb-1">💎 Payment Pool Active</div>
                                             <div className="grid grid-cols-3 gap-2 text-center mb-2">
                                                 <div>
-                                                    <div className="font-semibold text-[hsl(97,72%,67%)]">847</div>
+                                                    <div className="font-semibold text-[hsla(0, 0%, 2%, 1.00)]">847</div>
                                                     <div className="text-slate-500">Businesses</div>
                                                 </div>
                                                 <div>
-                                                    <div className="font-semibold text-[hsl(97,72%,67%)]">£12.4M</div>
+                                                    <div className="font-semibold text-[hsla(0, 0%, 0%, 1.00)]">£12.4M</div>
                                                     <div className="text-slate-500">Volume</div>
                                                 </div>
                                                 <div>
-                                                    <div className="font-semibold text-[hsl(97,72%,67%)]">2h 15m</div>
+                                                    <div className="font-semibold text-[hsla(0, 0%, 0%, 1.00)]">2h 15m</div>
                                                     <div className="text-slate-500">Until 3 PM</div>
                                                 </div>
                                             </div>

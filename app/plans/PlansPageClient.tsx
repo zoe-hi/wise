@@ -92,13 +92,14 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
                         <button
                             onClick={() => canCreatePlans && setIsNewPlanOpen(true)}
                             disabled={!canCreatePlans}
-                            className={`inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-white shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${canCreatePlans
-                                ? "bg-teal-500 hover:bg-teal-600 focus-visible:outline-teal-500"
-                                : "cursor-not-allowed bg-slate-300 opacity-50"
+                            className={`inline-flex items-center justify-center rounded-full px-5 py-2 text-sm font-semibold text-slate-900 shadow-sm transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 ${canCreatePlans
+                                    ? "bg-[hsl(97,72%,67%)] hover:bg-[hsl(97,72%,60%)] focus-visible:outline-[hsl(97,72%,67%)]"
+                                    : "cursor-not-allowed bg-slate-300 opacity-50"
                                 }`}
                         >
                             New plan
                         </button>
+
                         {!canCreatePlans && (
                             <p className="text-xs text-slate-500">
                                 View-only role: ask an Owner or Planner to create plans.
@@ -107,7 +108,13 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
                     </div>
                 </header>
 
-                <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+                <div
+                    className="overflow-hidden border border-slate-200 shadow-sm"
+                    style={{
+                        backgroundColor: "hsl(90, 14%, 93%)",
+                        borderRadius: "30px",
+                    }}
+                >
                     <table className="min-w-full divide-y divide-slate-200">
                         <thead className="bg-slate-50">
                             <tr>
@@ -125,7 +132,7 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
                                 </th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-200 bg-white">
+                        <tbody className="divide-y divide-slate-200 ">
                             {plans.map((plan) => {
                                 const statusStyle = statusStyles[plan.status];
                                 const formattedNetAmount = currencyFormatter(
@@ -135,7 +142,7 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
                                 return (
                                     <tr
                                         key={plan.id}
-                                        className="cursor-pointer bg-white transition hover:bg-slate-50"
+                                        className="cursor-pointer transition hover:bg-slate-50"
                                     >
                                         {/* Plan name cell with Link */}
                                         <td className="px-6 py-4 text-sm font-semibold text-slate-900">
