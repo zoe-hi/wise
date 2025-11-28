@@ -24,7 +24,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
 
     const [formData, setFormData] = useState({
         planName: "Payroll Plan A",
-        sendToRecipient: true,
+        operationType: "payment" as "payment" | "conversion",
         selectedRecipient: "1",
         sourceCurrency: "GBP",
         targetCurrency: "EUR",
@@ -39,6 +39,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [showPaymentMethodModal, setShowPaymentMethodModal] = useState(false);
 
     // Fetch approval threshold
     useEffect(() => {
@@ -144,55 +145,24 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
     };
 
     const exchangeRate = 1.1417;
-    const standardFee = 7.75;
-    const poolDiscount = 1.50;
-    const totalFee = 6.25;
+    const amount = Number(formData.sendAmount) || 0;
+
+    // Fee calculations based on payment method
+    const poolFeeRate = 0.0025; // 0.25%
+    const directFeeRate = 0.0031; // 0.31%
+
+    const poolFee = amount * poolFeeRate;
+    const directFee = amount * directFeeRate;
+    const poolDiscount = directFee - poolFee;
+
+    const currentFee = formData.paymentMethod === "pool" ? poolFee : directFee;
+    const currentFeeRate = formData.paymentMethod === "pool" ? poolFeeRate * 100 : directFeeRate * 100;
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-4 backdrop-blur-sm">
             <div className="my-8 w-full max-w-4xl rounded-2xl bg-white shadow-xl max-h-[95vh] overflow-hidden flex flex-col">
-                <div className="border-b border-slate-200 px-6 py-4 flex justify-between items-center bg-white">
-                    <h2 className="text-xl font-semibold text-slate-900">New Payment Plan</h2>
-                    <button
-                        onClick={onClose}
-                        className="text-slate-400 hover:text-slate-600 transition"
-                    >
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-
                 <div className="overflow-y-auto flex-1">
                     <div className="p-6">
-                        {/* Pool Highlight Banner */}
-                        <div className="bg-emerald-50 border border-emerald-500 rounded-lg p-4 mb-6">
-                            <div className="flex items-center gap-2 mb-2">
-                                <span className="bg-emerald-500 text-white px-2 py-0.5 rounded-full text-xs font-bold uppercase">
-                                    NEW
-                                </span>
-                                <h3 className="text-base font-semibold text-slate-800">
-                                    💎 Payment Pool - Save up to 20%
-                                </h3>
-                            </div>
-                            <p className="text-sm text-slate-700 mb-3">
-                                Join 847 businesses in today's pool. Combined volume = better rates for everyone.
-                            </p>
-                            <div className="grid grid-cols-3 gap-3 text-center">
-                                <div>
-                                    <div className="text-lg font-semibold text-emerald-600">847</div>
-                                    <div className="text-xs text-slate-600">Businesses</div>
-                                </div>
-                                <div>
-                                    <div className="text-lg font-semibold text-emerald-600">£12.4M</div>
-                                    <div className="text-xs text-slate-600">Pool volume</div>
-                                </div>
-                                <div>
-                                    <div className="text-lg font-semibold text-emerald-600">2h 15m</div>
-                                    <div className="text-xs text-slate-600">Until closes</div>
-                                </div>
-                            </div>
-                        </div>
 
                         <div className="grid lg:grid-cols-2 gap-6">
                             {/* Left Column */}
@@ -210,27 +180,47 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                     />
                                 </div>
 
-                                <div className="p-3 bg-slate-50 rounded">
-                                    <label className="flex items-center gap-2 cursor-pointer text-sm font-medium text-slate-800">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.sendToRecipient}
-                                            onChange={(e) =>
-                                                setFormData({
-                                                    ...formData,
-                                                    sendToRecipient: e.target.checked,
-                                                })
+                                <div>
+                                    <label className="block text-sm font-medium text-slate-700 mb-2">Operation Type</label>
+                                    <div className="flex gap-2">
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setFormData({ ...formData, operationType: "payment" })
                                             }
-                                            className="w-4 h-4 accent-emerald-500"
-                                        />
-                                        <span>Send to recipient</span>
-                                    </label>
+                                            className={`flex-1 py-2 text-sm border-2 rounded font-medium transition ${
+                                                formData.operationType === "payment"
+                                                    ? "border-emerald-500 bg-emerald-50 text-emerald-600"
+                                                    : "border-slate-300 text-slate-600"
+                                            }`}
+                                        >
+                                            💸 Payment
+                                        </button>
+                                        <button
+                                            type="button"
+                                            onClick={() =>
+                                                setFormData({ ...formData, operationType: "conversion" })
+                                            }
+                                            className={`flex-1 py-2 text-sm border-2 rounded font-medium transition ${
+                                                formData.operationType === "conversion"
+                                                    ? "border-emerald-500 bg-emerald-50 text-emerald-600"
+                                                    : "border-slate-300 text-slate-600"
+                                            }`}
+                                        >
+                                            🔄 Conversion
+                                        </button>
+                                    </div>
+                                    <div className="text-xs text-slate-500 mt-1">
+                                        {formData.operationType === "payment"
+                                            ? "Send money to a recipient"
+                                            : "Convert between your multi-currency balances"}
+                                    </div>
                                 </div>
 
-                                {formData.sendToRecipient && (
+                                {formData.operationType === "payment" && (
                                     <div>
                                         <label className="block text-sm font-medium text-slate-700 mb-1">
-                                            Select Recipient
+                                            Recipient
                                         </label>
                                         <select
                                             value={formData.selectedRecipient}
@@ -361,90 +351,101 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                             {/* Right Column */}
                             <div className="space-y-4">
                                 <div>
-                                    <div className="text-sm font-medium text-slate-700 mb-2">Payment Method</div>
-
-                                    <div
-                                        onClick={() =>
-                                            setFormData({ ...formData, paymentMethod: "direct" })
-                                        }
-                                        className="flex items-center gap-2 p-2 border-2 border-slate-300 rounded cursor-pointer hover:border-slate-400 transition"
+                                    <div className="text-sm font-medium text-slate-700 mb-2">Paying with</div>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPaymentMethodModal(true)}
+                                        className="w-full flex items-center justify-between p-3 border-2 border-slate-300 rounded hover:border-slate-400 transition"
                                     >
-                                        <div
-                                            className={`w-4 h-4 border-2 rounded-full flex items-center justify-center ${
-                                                formData.paymentMethod === "direct"
-                                                    ? "border-emerald-500"
-                                                    : "border-slate-300"
-                                            }`}
-                                        >
-                                            {formData.paymentMethod === "direct" && (
-                                                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
+                                        <div className="flex items-center gap-3">
+                                            {formData.paymentMethod === "pool" ? (
+                                                <>
+                                                    <div className="text-xl">💎</div>
+                                                    <div className="text-left">
+                                                        <div className="text-sm font-semibold text-slate-800">
+                                                            Payment Pool
+                                                        </div>
+                                                        <div className="text-xs text-emerald-600">
+                                                            {currentFee.toFixed(2)} {formData.sourceCurrency} fee • by 5 PM
+                                                        </div>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <div className="text-xl">🏦</div>
+                                                    <div className="text-left">
+                                                        <div className="text-sm font-semibold text-slate-800">
+                                                            Bank transfer
+                                                        </div>
+                                                        <div className="text-xs text-slate-600">
+                                                            {currentFee.toFixed(2)} {formData.sourceCurrency} fee • in seconds
+                                                        </div>
+                                                    </div>
+                                                </>
                                             )}
                                         </div>
-                                        <div className="text-base">🏦</div>
-                                        <div className="text-sm font-medium">Bank transfer</div>
-                                    </div>
-
-                                    <div
-                                        onClick={() => setFormData({ ...formData, paymentMethod: "pool" })}
-                                        className="relative flex items-center gap-2 p-2 border-2 border-emerald-500 bg-emerald-50 rounded cursor-pointer"
-                                    >
-                                        <div className="absolute -top-2 left-3 bg-emerald-500 text-white px-2 py-0.5 rounded-full text-xs font-bold">
-                                            SAVE 20%
-                                        </div>
-                                        <div className="w-4 h-4 border-2 border-emerald-500 rounded-full flex items-center justify-center">
-                                            {formData.paymentMethod === "pool" && (
-                                                <div className="w-2 h-2 bg-emerald-500 rounded-full"></div>
-                                            )}
-                                        </div>
-                                        <div className="text-base">💎</div>
-                                        <div className="flex-1">
-                                            <div className="text-sm font-semibold text-slate-800">
-                                                Payment Pool
-                                            </div>
-                                            <div className="text-xs text-emerald-600 font-medium">
-                                                Today by 5 PM • Save £{poolDiscount.toFixed(2)}
-                                            </div>
-                                        </div>
-                                    </div>
+                                        <div className="text-sm text-slate-500">Change →</div>
+                                    </button>
                                 </div>
 
                                 <div className="border-t border-slate-200 pt-3">
                                     <div className="text-sm font-medium text-slate-700 mb-2">Fee Breakdown</div>
                                     <div className="space-y-1.5 text-sm">
                                         <div className="flex justify-between">
-                                            <span className="text-slate-600">Bank fee</span>
-                                            <span className="font-medium">0 GBP</span>
+                                            <span className="text-slate-600">Transfer amount</span>
+                                            <span className="font-medium">{amount.toFixed(2)} {formData.sourceCurrency}</span>
                                         </div>
                                         <div className="flex justify-between">
-                                            <span className="text-slate-600">Standard fee (0.31%)</span>
-                                            <span className="font-medium">{standardFee.toFixed(2)} GBP</span>
+                                            <span className="text-slate-600">
+                                                Fee ({currentFeeRate.toFixed(2)}%)
+                                            </span>
+                                            <span className="font-medium">{currentFee.toFixed(2)} {formData.sourceCurrency}</span>
                                         </div>
 
-                                        {formData.paymentMethod === "pool" && (
+                                        {formData.paymentMethod === "pool" && poolDiscount > 0 && (
                                             <div className="bg-emerald-100 border border-emerald-500 rounded p-1.5 flex justify-between">
                                                 <span className="text-emerald-600 font-medium text-xs">
-                                                    💎 Pool discount
+                                                    💎 Pool savings vs direct
                                                 </span>
                                                 <span className="text-emerald-600 font-semibold text-xs">
-                                                    -{poolDiscount.toFixed(2)} GBP
+                                                    {poolDiscount.toFixed(2)} {formData.sourceCurrency}
                                                 </span>
                                             </div>
                                         )}
 
                                         <div className="flex justify-between pt-2 border-t border-slate-200 font-semibold">
-                                            <span>Total fees</span>
-                                            <span>{totalFee.toFixed(2)} GBP</span>
+                                            <span>Total cost</span>
+                                            <span>{(amount + currentFee).toFixed(2)} {formData.sourceCurrency}</span>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div className="p-3 bg-slate-50 rounded text-xs text-slate-600">
                                     <div>
-                                        Arrives: <strong className="text-slate-800">Today by 5:00 PM CET</strong>
+                                        Arrives: <strong className="text-slate-800">
+                                            {formData.paymentMethod === "pool" ? "Today by 5:00 PM CET" : "In seconds"}
+                                        </strong>
                                     </div>
                                     {formData.paymentMethod === "pool" && (
-                                        <div className="mt-1 text-emerald-600">
-                                            Pool closes in 2h 15m • 847 businesses joined
+                                        <div className="mt-2 pt-2 border-t border-slate-200">
+                                            <div className="font-semibold text-emerald-600 mb-1">💎 Payment Pool Active</div>
+                                            <div className="grid grid-cols-3 gap-2 text-center mb-2">
+                                                <div>
+                                                    <div className="font-semibold text-emerald-600">847</div>
+                                                    <div className="text-slate-500">Businesses</div>
+                                                </div>
+                                                <div>
+                                                    <div className="font-semibold text-emerald-600">£12.4M</div>
+                                                    <div className="text-slate-500">Volume</div>
+                                                </div>
+                                                <div>
+                                                    <div className="font-semibold text-emerald-600">2h 15m</div>
+                                                    <div className="text-slate-500">Until 3 PM</div>
+                                                </div>
+                                            </div>
+                                            <div className="text-slate-500 text-center pt-1 border-t border-slate-200">
+                                                Pool closes at 3:00 PM • Resets daily
+                                            </div>
                                         </div>
                                     )}
                                 </div>
@@ -502,6 +503,98 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                     </button>
                 </div>
             </div>
+
+            {/* Payment Method Selection Modal */}
+            {showPaymentMethodModal && (
+                <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-900/50 p-4">
+                    <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full max-h-[90vh] overflow-hidden">
+                        <div className="border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+                            <div>
+                                <h3 className="text-xl font-semibold text-slate-900">How would you like to pay?</h3>
+                                <p className="text-sm text-slate-600 mt-1">Here are the ways you can pay for this transfer</p>
+                            </div>
+                            <button
+                                onClick={() => setShowPaymentMethodModal(false)}
+                                className="text-slate-400 hover:text-slate-600 transition"
+                            >
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="p-6">
+                            <div className="text-sm font-medium text-slate-700 mb-4">Payment methods</div>
+                            <div className="space-y-3">
+                                {/* Bank Transfer */}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setFormData({ ...formData, paymentMethod: "direct" });
+                                        setShowPaymentMethodModal(false);
+                                    }}
+                                    className="w-full flex items-center justify-between p-4 border-2 border-slate-200 rounded-lg hover:border-slate-300 transition text-left"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-2xl">
+                                            🏦
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="font-semibold text-slate-900">Bank transfer</div>
+                                            <div className="text-sm text-slate-600">
+                                                Transfer money to Wise using your bank account.
+                                            </div>
+                                            <div className="text-sm text-slate-800 mt-1">
+                                                <span className="font-semibold">{directFee.toFixed(2)} {formData.sourceCurrency}</span> fee • Should arrive <span className="font-semibold">in seconds</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+
+                                {/* Payment Pool */}
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setFormData({ ...formData, paymentMethod: "pool" });
+                                        setShowPaymentMethodModal(false);
+                                    }}
+                                    className="w-full relative flex items-center justify-between p-4 border-2 border-emerald-500 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition text-left"
+                                >
+                                    <div className="absolute -top-2 -right-2 bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                        RECOMMENDED
+                                    </div>
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-2xl">
+                                            💎
+                                        </div>
+                                        <div className="flex-1">
+                                            <div className="font-semibold text-slate-900">Payment Pool</div>
+                                            <div className="text-sm text-slate-700">
+                                                Join 847 businesses for better rates.
+                                            </div>
+                                            <div className="text-sm text-emerald-700 mt-1">
+                                                <span className="font-semibold">{poolFee.toFixed(2)} {formData.sourceCurrency}</span> fee • Should arrive <span className="font-semibold">by 5:00 PM</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+
+                                {poolDiscount > 0 && (
+                                    <div className="text-center text-sm text-emerald-600 font-medium mt-2">
+                                        💎 Save {poolDiscount.toFixed(2)} {formData.sourceCurrency} with Payment Pool
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
