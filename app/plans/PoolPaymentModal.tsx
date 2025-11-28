@@ -175,7 +175,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                         onChange={(e) =>
                                             setFormData({ ...formData, planName: e.target.value })
                                         }
-                                        className="w-full p-2 text-sm border border-slate-300 rounded focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                                        className="w-full p-2 text-sm border border-slate-300 rounded-lg focus:border-[hsl(97,72%,67%)] focus:ring-1 focus:ring-[hsl(97,72%,67%)] outline-none"
                                         placeholder="e.g., Monthly Supplier Payment"
                                     />
                                 </div>
@@ -188,11 +188,12 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                             onClick={() =>
                                                 setFormData({ ...formData, operationType: "payment" })
                                             }
-                                            className={`flex-1 py-2 text-sm border-2 rounded font-medium transition ${
+                                            className={`flex-1 py-2 text-sm font-medium transition border-none ${
                                                 formData.operationType === "payment"
-                                                    ? "border-emerald-500 bg-emerald-50 text-emerald-600"
-                                                    : "border-slate-300 text-slate-600"
+                                                    ? "bg-[hsl(97,72%,67%)] text-[hsl(80,11%,5%)]"
+                                                    : "bg-[hsl(90,14%,93%)] text-slate-600"
                                             }`}
+                                            style={{ borderRadius: '30px' }}
                                         >
                                             💸 Payment
                                         </button>
@@ -201,11 +202,12 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                             onClick={() =>
                                                 setFormData({ ...formData, operationType: "conversion" })
                                             }
-                                            className={`flex-1 py-2 text-sm border-2 rounded font-medium transition ${
+                                            className={`flex-1 py-2 text-sm font-medium transition border-none ${
                                                 formData.operationType === "conversion"
-                                                    ? "border-emerald-500 bg-emerald-50 text-emerald-600"
-                                                    : "border-slate-300 text-slate-600"
+                                                    ? "bg-[hsl(97,72%,67%)] text-[hsl(80,11%,5%)]"
+                                                    : "bg-[hsl(90,14%,93%)] text-slate-600"
                                             }`}
+                                            style={{ borderRadius: '30px' }}
                                         >
                                             🔄 Conversion
                                         </button>
@@ -230,7 +232,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                                     selectedRecipient: e.target.value,
                                                 })
                                             }
-                                            className="w-full p-2 text-sm border border-slate-300 rounded focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none bg-white"
+                                            className="w-full p-2 text-sm border border-slate-300 rounded-lg focus:border-[hsl(97,72%,67%)] focus:ring-1 focus:ring-[hsl(97,72%,67%)] outline-none bg-white"
                                         >
                                             <option value="">Choose recipient...</option>
                                             {RECIPIENTS.map((recipient) => (
@@ -242,7 +244,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                     </div>
                                 )}
 
-                                <div className="text-center text-xs text-slate-600 p-2 bg-slate-50 rounded border border-slate-200">
+                                <div className="text-center text-xs text-slate-600 p-2 bg-[hsl(90,14%,93%)] rounded-lg border border-slate-200">
                                     🔒 1 {formData.sourceCurrency} = {exchangeRate} {formData.targetCurrency}
                                 </div>
 
@@ -250,7 +252,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                     <label className="block text-sm font-medium text-slate-700 mb-1">
                                         You send exactly
                                     </label>
-                                    <div className="flex items-center justify-between p-2 border border-slate-300 rounded">
+                                    <div className="flex items-center justify-between p-2 border border-slate-300 rounded-lg focus-within:border-[hsl(97,72%,67%)] focus-within:ring-1 focus-within:ring-[hsl(97,72%,67%)]">
                                         <input
                                             type="number"
                                             value={formData.sendAmount}
@@ -270,7 +272,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                     <label className="block text-sm font-medium text-slate-700 mb-1">
                                         Recipient gets
                                     </label>
-                                    <div className="flex items-center justify-between p-2 border border-slate-300 rounded bg-slate-50">
+                                    <div className="flex items-center justify-between p-2 border border-slate-300 rounded-lg bg-[hsl(90,14%,93%)]">
                                         <span className="text-lg font-medium">{formData.receiveAmount}</span>
                                         <div className="flex items-center gap-1.5 font-semibold text-sm">
                                             {getCurrencyFlag(formData.targetCurrency)}
@@ -289,11 +291,12 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                             onClick={() =>
                                                 setFormData({ ...formData, transactionType: "single" })
                                             }
-                                            className={`flex-1 py-1.5 text-sm border-2 rounded font-medium transition ${
+                                            className={`flex-1 py-1.5 text-sm font-medium transition border-none ${
                                                 formData.transactionType === "single"
-                                                    ? "border-emerald-500 bg-emerald-50 text-emerald-600"
-                                                    : "border-slate-300 text-slate-600"
+                                                    ? "bg-[hsl(97,72%,67%)] text-[hsl(80,11%,5%)]"
+                                                    : "bg-[hsl(90,14%,93%)] text-slate-600"
                                             }`}
+                                            style={{ borderRadius: '30px' }}
                                         >
                                             Single
                                         </button>
@@ -302,11 +305,12 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                             onClick={() =>
                                                 setFormData({ ...formData, transactionType: "recurring" })
                                             }
-                                            className={`flex-1 py-1.5 text-sm border-2 rounded font-medium transition ${
+                                            className={`flex-1 py-1.5 text-sm font-medium transition border-none ${
                                                 formData.transactionType === "recurring"
-                                                    ? "border-emerald-500 bg-emerald-50 text-emerald-600"
-                                                    : "border-slate-300 text-slate-600"
+                                                    ? "bg-[hsl(97,72%,67%)] text-[hsl(80,11%,5%)]"
+                                                    : "bg-[hsl(90,14%,93%)] text-slate-600"
                                             }`}
+                                            style={{ borderRadius: '30px' }}
                                         >
                                             Recurring
                                         </button>
@@ -320,7 +324,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                                     recurringFrequency: e.target.value,
                                                 })
                                             }
-                                            className="w-full p-2 text-sm border border-slate-300 rounded mt-2 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none bg-white"
+                                            className="w-full p-2 text-sm border border-slate-300 rounded-lg mt-2 focus:border-[hsl(97,72%,67%)] focus:ring-1 focus:ring-[hsl(97,72%,67%)] outline-none bg-white"
                                         >
                                             <option value="weekly">Weekly</option>
                                             <option value="biweekly">Every 2 weeks</option>
@@ -340,7 +344,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                         onChange={(e) =>
                                             setFormData({ ...formData, paymentDeadline: e.target.value })
                                         }
-                                        className="w-full p-2 text-sm border border-slate-300 rounded focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none"
+                                        className="w-full p-2 text-sm border border-slate-300 rounded-lg focus:border-[hsl(97,72%,67%)] focus:ring-1 focus:ring-[hsl(97,72%,67%)] outline-none"
                                     />
                                     <div className="text-xs text-slate-500 mt-1">
                                         Executed before this time
@@ -355,7 +359,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                     <button
                                         type="button"
                                         onClick={() => setShowPaymentMethodModal(true)}
-                                        className="w-full flex items-center justify-between p-3 border-2 border-slate-300 rounded hover:border-slate-400 transition"
+                                        className="w-full flex items-center justify-between p-3 border-2 border-slate-300 rounded-lg hover:border-slate-400 transition"
                                     >
                                         <div className="flex items-center gap-3">
                                             {formData.paymentMethod === "pool" ? (
@@ -365,7 +369,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                                         <div className="text-sm font-semibold text-slate-800">
                                                             Payment Pool
                                                         </div>
-                                                        <div className="text-xs text-emerald-600">
+                                                        <div className="text-xs text-[hsl(97,72%,67%)]">
                                                             {currentFee.toFixed(2)} {formData.sourceCurrency} fee • by 5 PM
                                                         </div>
                                                     </div>
@@ -403,11 +407,11 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                         </div>
 
                                         {formData.paymentMethod === "pool" && poolDiscount > 0 && (
-                                            <div className="bg-emerald-100 border border-emerald-500 rounded p-1.5 flex justify-between">
-                                                <span className="text-emerald-600 font-medium text-xs">
+                                            <div className="bg-[hsl(97,72%,90%)] border border-[hsl(97,72%,67%)] rounded-lg p-1.5 flex justify-between">
+                                                <span className="text-[hsl(122.5,92.08%,19.8%)] font-medium text-xs">
                                                     💎 Pool savings vs direct
                                                 </span>
-                                                <span className="text-emerald-600 font-semibold text-xs">
+                                                <span className="text-[hsl(122.5,92.08%,19.8%)] font-semibold text-xs">
                                                     {poolDiscount.toFixed(2)} {formData.sourceCurrency}
                                                 </span>
                                             </div>
@@ -420,7 +424,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                     </div>
                                 </div>
 
-                                <div className="p-3 bg-slate-50 rounded text-xs text-slate-600">
+                                <div className="p-3 bg-[hsl(90,14%,93%)] rounded-lg text-xs text-slate-600">
                                     <div>
                                         Arrives: <strong className="text-slate-800">
                                             {formData.paymentMethod === "pool" ? "Today by 5:00 PM CET" : "In seconds"}
@@ -428,18 +432,18 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                     </div>
                                     {formData.paymentMethod === "pool" && (
                                         <div className="mt-2 pt-2 border-t border-slate-200">
-                                            <div className="font-semibold text-emerald-600 mb-1">💎 Payment Pool Active</div>
+                                            <div className="font-semibold text-[hsl(122.5,92.08%,19.8%)] mb-1">💎 Payment Pool Active</div>
                                             <div className="grid grid-cols-3 gap-2 text-center mb-2">
                                                 <div>
-                                                    <div className="font-semibold text-emerald-600">847</div>
+                                                    <div className="font-semibold text-[hsl(97,72%,67%)]">847</div>
                                                     <div className="text-slate-500">Businesses</div>
                                                 </div>
                                                 <div>
-                                                    <div className="font-semibold text-emerald-600">£12.4M</div>
+                                                    <div className="font-semibold text-[hsl(97,72%,67%)]">£12.4M</div>
                                                     <div className="text-slate-500">Volume</div>
                                                 </div>
                                                 <div>
-                                                    <div className="font-semibold text-emerald-600">2h 15m</div>
+                                                    <div className="font-semibold text-[hsl(97,72%,67%)]">2h 15m</div>
                                                     <div className="text-slate-500">Until 3 PM</div>
                                                 </div>
                                             </div>
@@ -457,7 +461,7 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                         onChange={(e) =>
                                             setFormData({ ...formData, backupPlan: e.target.value })
                                         }
-                                        className="w-full p-2 text-sm border border-slate-300 rounded focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 outline-none bg-white"
+                                        className="w-full p-2 text-sm border border-slate-300 rounded-lg focus:border-[hsl(97,72%,67%)] focus:ring-1 focus:ring-[hsl(97,72%,67%)] outline-none bg-white"
                                     >
                                         <option value="">None</option>
                                         <option value="receiver_currency">
@@ -486,18 +490,20 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                     </div>
                 </div>
 
-                <div className="border-t border-slate-200 px-6 py-4 bg-slate-50 flex gap-3">
+                <div className="border-t border-slate-200 px-6 py-4 bg-[hsl(90,14%,93%)] flex gap-3">
                     <button
                         onClick={handleCancel}
                         disabled={isLoading}
-                        className="flex-1 py-2.5 bg-white border-2 border-slate-300 text-slate-700 rounded-lg font-semibold hover:bg-slate-50 transition disabled:opacity-50"
+                        className="flex-1 py-2.5 bg-white border-none text-slate-700 font-semibold hover:bg-[hsl(90,14%,93%)] transition disabled:opacity-50"
+                        style={{ borderRadius: '30px' }}
                     >
                         Cancel
                     </button>
                     <button
                         onClick={handleApprove}
                         disabled={isLoading}
-                        className="flex-1 py-2.5 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition disabled:opacity-50"
+                        className="flex-1 py-2.5 bg-[hsl(97,72%,67%)] border-none text-[hsl(80,11%,5%)] font-semibold hover:bg-[hsl(122.5,92.08%,19.8%)] transition disabled:opacity-50"
+                        style={{ borderRadius: '30px' }}
                     >
                         {isLoading ? "Processing..." : "Approve Plan"}
                     </button>
@@ -533,7 +539,8 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                         setFormData({ ...formData, paymentMethod: "direct" });
                                         setShowPaymentMethodModal(false);
                                     }}
-                                    className="w-full flex items-center justify-between p-4 border-2 border-slate-200 rounded-lg hover:border-slate-300 transition text-left"
+                                    className="w-full flex items-center justify-between p-4 border-none bg-[hsl(90,14%,93%)] hover:bg-[hsl(90,14%,88%)] transition text-left"
+                                    style={{ borderRadius: '30px' }}
                                 >
                                     <div className="flex items-center gap-4">
                                         <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-2xl">
@@ -561,13 +568,14 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                         setFormData({ ...formData, paymentMethod: "pool" });
                                         setShowPaymentMethodModal(false);
                                     }}
-                                    className="w-full relative flex items-center justify-between p-4 border-2 border-emerald-500 bg-emerald-50 rounded-lg hover:bg-emerald-100 transition text-left"
+                                    className="w-full relative flex items-center justify-between p-4 border-none bg-[hsl(97,72%,90%)] hover:bg-[hsl(97,72%,85%)] transition text-left"
+                                    style={{ borderRadius: '30px' }}
                                 >
-                                    <div className="absolute -top-2 -right-2 bg-emerald-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                                    <div className="absolute -top-2 -right-2 bg-[hsl(97,72%,67%)] text-white px-3 py-1 rounded-full text-xs font-bold">
                                         RECOMMENDED
                                     </div>
                                     <div className="flex items-center gap-4">
-                                        <div className="w-12 h-12 bg-emerald-100 rounded-full flex items-center justify-center text-2xl">
+                                        <div className="w-12 h-12 bg-[hsl(97,72%,90%)] rounded-full flex items-center justify-center text-2xl">
                                             💎
                                         </div>
                                         <div className="flex-1">
@@ -575,18 +583,18 @@ export function PoolPaymentModal({ onClose, onSave }: PoolPaymentModalProps) {
                                             <div className="text-sm text-slate-700">
                                                 Join 847 businesses for better rates.
                                             </div>
-                                            <div className="text-sm text-emerald-700 mt-1">
+                                            <div className="text-sm text-[hsl(122.5,92.08%,19.8%)] mt-1">
                                                 <span className="font-semibold">{poolFee.toFixed(2)} {formData.sourceCurrency}</span> fee • Should arrive <span className="font-semibold">by 5:00 PM</span>
                                             </div>
                                         </div>
                                     </div>
-                                    <svg className="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg className="w-5 h-5 text-[hsl(97,72%,67%)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                                     </svg>
                                 </button>
 
                                 {poolDiscount > 0 && (
-                                    <div className="text-center text-sm text-emerald-600 font-medium mt-2">
+                                    <div className="text-center text-sm text-[hsl(97,72%,67%)] font-medium mt-2">
                                         💎 Save {poolDiscount.toFixed(2)} {formData.sourceCurrency} with Payment Pool
                                     </div>
                                 )}
