@@ -34,7 +34,7 @@ const statusStyles: Record<
         dot: "bg-emerald-500",
     },
     CANCELLED: {
-        badge: "border border-rose-100 bg-rose-50 text-rose-700",
+        badge: "border border-rose-100  text-rose-700",
         dot: "bg-rose-500",
     },
     COMPLETED: {
@@ -77,7 +77,7 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
     const canCreatePlans = role !== "VIEWER";
 
     return (
-        <div className="min-h-screen bg-slate-100 pb-16">
+        <div className="min-h-screen pb-16">
             <div className="mx-auto max-w-6xl px-6 pt-12">
                 <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
