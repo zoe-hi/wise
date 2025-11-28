@@ -162,6 +162,99 @@ export function PlanDetailClient({
         return null;
     };
 
+    const planTimelineEl= () => {
+        if (steps.length > 0) {
+          return(
+              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                      Plan timeline
+                  </h3>
+                  <ol className="mt-4 space-y-4">
+                      {steps.map((step, index) => (
+                          <li
+                              key={step.id}
+                              className="flex gap-4 rounded-xl border border-slate-100 bg-slate-50/80 p-4"
+                          >
+                              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-semibold text-slate-900 shadow-sm">
+                                  {index + 1}
+                              </div>
+                              <div className="flex-1">
+                                  <div className="flex flex-wrap items-center gap-2">
+                                      <p className="text-sm font-semibold text-slate-900">
+                                          {amountFormatter.format(step.targetAmount)}{" "}
+                                          {step.targetCurrency}
+                                      </p>
+                                      <span className="text-xs text-slate-500">
+                                          {dateTimeFormatter.format(new Date(step.when))}
+                                      </span>
+                                  </div>
+                                  <p className="mt-2 text-sm text-slate-700">
+                                      {step.explanation}
+                                  </p>
+                              </div>
+                          </li>
+                      ))}
+                  </ol>
+              </section>
+          );
+        } else {
+            return (
+              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                      Activity log
+                  </h3>
+                  <p className="text-sm text-slate-500 mt-2">No data</p>
+              </section>
+            );
+        }
+    };
+
+    const activityLogEl= () => {
+      if (activity.length > 0) {
+          return (
+              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                      Activity log
+                  </h3>
+                  <ul className="mt-4 space-y-3">
+                      {[...activity].reverse().map((entry) => (
+                          <li
+                              key={entry.id}
+                              className="rounded-lg border border-slate-100 bg-slate-50/70 p-4"
+                          >
+                              <div className="flex items-start justify-between">
+                                  <div>
+                                      <p className="text-sm font-semibold text-slate-900">
+                                          {entry.userName}{" "}
+                                          <span className="text-xs font-medium text-slate-500">
+                                              ({entry.userRole})
+                                          </span>
+                                      </p>
+                                      <p className="text-sm text-slate-700">
+                                          {entry.message}
+                                      </p>
+                                  </div>
+                                  <p className="text-xs text-slate-500">
+                                      {dateTimeFormatter.format(new Date(entry.createdAt))}
+                                  </p>
+                              </div>
+                          </li>
+                      ))}
+                  </ul>
+              </section>
+          );
+        } else {
+          return (
+              <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+                  <h3 className="text-lg font-semibold text-slate-900">
+                      Activity log
+                  </h3>
+                  <p className="text-sm text-slate-500 mt-2">No data</p>
+              </section>
+          );
+        }
+    };
+
     const statusStyle = statusStyles[plan.status];
     const amountFormatter = new Intl.NumberFormat("en-GB", {
         style: "currency",
@@ -192,69 +285,10 @@ export function PlanDetailClient({
             {/* Two-column grid: Timeline left, Activity log right */}
             <div className="grid gap-6 lg:grid-cols-2">
                 {/* Plan timeline */}
-                <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <h3 className="text-lg font-semibold text-slate-900">
-                        Plan timeline
-                    </h3>
-                    <ol className="mt-4 space-y-4">
-                        {steps.map((step, index) => (
-                            <li
-                                key={step.id}
-                                className="flex gap-4 rounded-xl border border-slate-100 bg-slate-50/80 p-4"
-                            >
-                                <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white text-sm font-semibold text-slate-900 shadow-sm">
-                                    {index + 1}
-                                </div>
-                                <div className="flex-1">
-                                    <div className="flex flex-wrap items-center gap-2">
-                                        <p className="text-sm font-semibold text-slate-900">
-                                            {amountFormatter.format(step.targetAmount)}{" "}
-                                            {step.targetCurrency}
-                                        </p>
-                                        <span className="text-xs text-slate-500">
-                                            {dateTimeFormatter.format(new Date(step.when))}
-                                        </span>
-                                    </div>
-                                    <p className="mt-2 text-sm text-slate-700">
-                                        {step.explanation}
-                                    </p>
-                                </div>
-                            </li>
-                        ))}
-                    </ol>
-                </section>
+                {planTimelineEl()}
 
                 {/* Activity log */}
-                <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-                    <h3 className="text-lg font-semibold text-slate-900">
-                        Activity log
-                    </h3>
-                    <ul className="mt-4 space-y-3">
-                        {[...activity].reverse().map((entry) => (
-                            <li
-                                key={entry.id}
-                                className="rounded-lg border border-slate-100 bg-slate-50/70 p-4"
-                            >
-                                <div className="flex items-start justify-between">
-                                    <div>
-                                        <p className="text-sm font-semibold text-slate-900">
-                                            {entry.userName}{" "}
-                                            <span className="text-xs font-medium text-slate-500">
-                                                ({entry.userRole})
-                                            </span>
-                                        </p>
-                                        <p className="text-sm text-slate-700">
-                                            {entry.message}
-                                        </p>
-                                    </div>
-                                    <p className="text-xs text-slate-500">
-                                        {dateTimeFormatter.format(new Date(entry.createdAt))}
-                                    </p>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </section>
+                {activityLogEl()}
             </div>
         </div>
     );
