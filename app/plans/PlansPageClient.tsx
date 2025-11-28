@@ -14,6 +14,7 @@ type PlanSummary = {
     targetCurrency: string;
     netAmount: number;
     convertBy: string;
+    createdAt: string;
 };
 
 type PlansPageClientProps = {
@@ -63,7 +64,7 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
 
     const [plans, setPlans] = useState<PlanSummary[]>(
         [...initialPlans].sort(
-            (a, b) => new Date(b.convertBy).getTime() - new Date(a.convertBy).getTime()
+            (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         )
     );
     const [isNewPlanOpen, setIsNewPlanOpen] = useState(false);
@@ -72,7 +73,7 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
         setPlans((prev) => {
             const updated = [...prev, newPlan];
             return updated.sort(
-                (a, b) => new Date(b.convertBy).getTime() - new Date(a.convertBy).getTime()
+                (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
             );
         });
         setIsNewPlanOpen(false);

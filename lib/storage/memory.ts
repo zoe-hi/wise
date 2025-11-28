@@ -26,7 +26,7 @@ if (!globalThis.__memoryStore) {
       existingBalance: 20000,
       expectedInflows: 30000,
       status: "DRAFT",
-      createdAt: now,
+      createdAt: "2025-11-22T6:15:00Z",
       createdBy: "user-1",
     },
     {
