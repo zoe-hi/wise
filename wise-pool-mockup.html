@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wise Business - Send Payment with Pool Option</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Avenir Next', Avenir, 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            background: #f7f9fa;
+            line-height: 1.5;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            max-width: 1400px;
+            margin: 0 auto;
+            min-height: 100vh;
+        }
+        
+        .left-side {
+            background: white;
+            padding: 60px 80px;
+        }
+        
+        .right-side {
+            background: #f7f9fa;
+            padding: 40px 60px;
+        }
+        
+        h1 {
+            font-size: 48px;
+            font-weight: 600;
+            color: #2e4369;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            color: #6b7c93;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-icon {
+            width: 16px;
+            height: 16px;
+            border: 1.5px solid #6b7c93;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .feature {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: #f7f9fa;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 24px;
+        }
+        
+        .feature-content h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2e4369;
+            margin-bottom: 8px;
+        }
+        
+        .feature-content p {
+            font-size: 15px;
+            color: #6b7c93;
+            line-height: 1.6;
+        }
+        
+        .pool-highlight {
+            background: #e6f7ee;
+            border: 2px solid #00b67a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-top: 40px;
+        }
+        
+        .pool-highlight-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .pool-badge {
+            background: #00b67a;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .pool-highlight h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2e4369;
+        }
+        
+        .pool-highlight-content {
+            font-size: 15px;
+            color: #2e4369;
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        
+        .pool-benefits {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        
+        .pool-benefit {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #2e4369;
+        }
+        
+        .pool-benefit::before {
+            content: '✓';
+            color: #00b67a;
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .pool-stats {
+            display: flex;
+            gap: 20px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #00b67a33;
+        }
+        
+        .pool-stat {
+            flex: 1;
+        }
+        
+        .pool-stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #00b67a;
+        }
+        
+        .pool-stat-label {
+            font-size: 12px;
+            color: #6b7c93;
+            margin-top: 4px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 14px 28px;
+            background: white;
+            border: 2px solid #2e4369;
+            border-radius: 4px;
+            color: #2e4369;
+            font-size: 15px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .cta-button:hover {
+            background: #2e4369;
+            color: white;
+        }
+        
+        .payment-card {
+            background: white;
+            border-radius: 8px;
+            padding: 32px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        
+        .rate-guarantee {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #6b7c93;
+            margin-bottom: 20px;
+        }
+        
+        .rate-guarantee::before {
+            content: '🔒';
+            font-size: 14px;
+        }
+        
+        .exchange-rate {
+            text-align: center;
+            font-size: 14px;
+            color: #6b7c93;
+            margin-bottom: 24px;
+            padding: 12px;
+            background: #f7f9fa;
+            border-radius: 6px;
+        }
+        
+        .input-group {
+            margin-bottom: 24px;
+        }
+        
+        .input-label {
+            font-size: 13px;
+            color: #6b7c93;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .input-field {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid #dfe4ea;
+            border-radius: 4px;
+            font-size: 20px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        
+        .input-field:hover {
+            border-color: #9ca8b4;
+        }
+        
+        .currency-flag {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+        }
+        
+        .paying-with-section {
+            margin: 32px 0;
+        }
+        
+        .section-label {
+            font-size: 13px;
+            color: #6b7c93;
+            margin-bottom: 12px;
+        }
+        
+        .payment-method {
+            border: 2px solid #dfe4ea;
+            border-radius: 4px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            margin-bottom: 12px;
+        }
+        
+        .payment-method:hover {
+            border-color: #9ca8b4;
+        }
+        
+        .payment-method-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .payment-method-icon {
+            font-size: 20px;
+        }
+        
+        .payment-method-name {
+            font-size: 15px;
+            color: #2e4369;
+            font-weight: 500;
+        }
+        
+        .change-link {
+            color: #6b7c93;
+            font-size: 14px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .pool-option {
+            border: 2px solid #00b67a;
+            background: #f0fdf6;
+            position: relative;
+        }
+        
+        .pool-option::before {
+            content: 'SAVE 20%';
+            position: absolute;
+            top: -12px;
+            left: 16px;
+            background: #00b67a;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .pool-method-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        
+        .pool-method-name {
+            font-size: 15px;
+            color: #2e4369;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pool-method-desc {
+            font-size: 13px;
+            color: #00b67a;
+            font-weight: 500;
+        }
+        
+        .fee-breakdown {
+            border-top: 1px solid #dfe4ea;
+            padding-top: 20px;
+            margin-top: 20px;
+        }
+        
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .fee-label {
+            color: #6b7c93;
+        }
+        
+        .fee-value {
+            color: #2e4369;
+            font-weight: 500;
+        }
+        
+        .volume-discount {
+            background: #e6f7ee;
+            border-radius: 4px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        
+        .volume-discount .fee-label {
+            color: #00b67a;
+            font-weight: 500;
+        }
+        
+        .volume-discount .fee-value {
+            color: #00b67a;
+            font-weight: 600;
+        }
+        
+        .pool-discount {
+            background: #dcfce7;
+            border: 1px solid #00b67a;
+        }
+        
+        .total-fee {
+            font-weight: 600;
+            font-size: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #dfe4ea;
+        }
+        
+        .arrival-info {
+            margin-top: 20px;
+            padding: 16px;
+            background: #f7f9fa;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #6b7c93;
+        }
+        
+        .arrival-info strong {
+            color: #2e4369;
+        }
+        
+        .promo-banner {
+            margin-top: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, #e6f7ee 0%, #dcfce7 100%);
+            border-radius: 8px;
+            display: flex;
+            gap: 16px;
+        }
+        
+        .promo-icon {
+            font-size: 32px;
+            flex-shrink: 0;
+        }
+        
+        .promo-content h4 {
+            font-size: 15px;
+            color: #2e4369;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .promo-content p {
+            font-size: 13px;
+            color: #6b7c93;
+            margin-bottom: 12px;
+        }
+        
+        .promo-link {
+            color: #00b67a;
+            font-size: 13px;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px solid #00b67a;
+        }
+        
+        .radio-button {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #dfe4ea;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .radio-button.selected {
+            border-color: #00b67a;
+        }
+        
+        .radio-button.selected::after {
+            content: '';
+            width: 10px;
+            height: 10px;
+            background: #00b67a;
+            border-radius: 50%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dfe4ea;
+            border-radius: 4px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #00b67a;
+        }
+
+        .transaction-type-section {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f7f9fa;
+            border-radius: 6px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            color: #2e4369;
+            font-weight: 500;
+        }
+
+        .checkbox-label input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #00b67a;
+        }
+
+        .checkbox-text {
+            user-select: none;
+        }
+
+        .receiver-section {
+            margin-bottom: 24px;
+        }
+
+        .select-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #dfe4ea;
+            border-radius: 4px;
+            font-size: 15px;
+            font-family: inherit;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+
+        .select-input:focus {
+            outline: none;
+            border-color: #00b67a;
+        }
+
+        .transaction-frequency-section {
+            margin-bottom: 24px;
+        }
+
+        .frequency-toggle {
+            display: flex;
+            gap: 8px;
+        }
+
+        .frequency-button {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid #dfe4ea;
+            background: white;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #6b7c93;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .frequency-button:hover {
+            border-color: #9ca8b4;
+        }
+
+        .frequency-button.active {
+            border-color: #00b67a;
+            background: #e6f7ee;
+            color: #00b67a;
+        }
+
+        .plan-connection-section {
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 2px solid #dfe4ea;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .cancel-button,
+        .approve-button {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cancel-button {
+            background: #f7f9fa;
+            color: #6b7c93;
+            border: 2px solid #dfe4ea;
+        }
+
+        .cancel-button:hover {
+            background: #dfe4ea;
+            border-color: #9ca8b4;
+        }
+
+        .approve-button {
+            background: #00b67a;
+            color: white;
+        }
+
+        .approve-button:hover {
+            background: #009961;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="left-side">
+            <h1>Send fast, simple, global payments</h1>
+            <div class="subtitle">
+                Save with our stand out exchange rates. <span class="info-icon">i</span>
+            </div>
+            
+            <div class="feature-list">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-content">
+                        <h3>Instantly pay invoices, suppliers and teams</h3>
+                        <p>Over half of payments arrive in 20 seconds, and 95% take less than 24 hours.*</p>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-content">
+                        <h3>Time saving batch payments</h3>
+                        <p>Simplified bulk transfers that allow you to pay up to 1,000 contacts in one click.</p>
+                    </div>
+                </div>
+                
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <div class="feature-content">
+                        <h3>Volume discounts on large amounts</h3>
+                        <p>When you send, spend or convert over 20,000 GBP or equivalent in a month, you'll get a volume discount.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="pool-highlight">
+                <div class="pool-highlight-header">
+                    <span class="pool-badge">NEW</span>
+                    <h3>💎 Payment Pool - Better rates together</h3>
+                </div>
+                <div class="pool-highlight-content">
+                    <strong>Join with other businesses and unlock enterprise pricing - even if you're small.</strong>
+                    <p style="margin-top: 12px;">When you join the daily Payment Pool, your transfer is combined with hundreds of other businesses. Together, you achieve the volume needed for the best rates.</p>
+                </div>
+                <div class="pool-benefits">
+                    <div class="pool-benefit">Pay just 0.25% (vs. 0.31% direct) - up to 20% cheaper</div>
+                    <div class="pool-benefit">Still arrives same day (by 5 PM local time)</div>
+                    <div class="pool-benefit">Perfect for planned payments: payroll, invoices, suppliers</div>
+                    <div class="pool-benefit">Help other small businesses save too</div>
+                </div>
+                <div class="pool-stats">
+                    <div class="pool-stat">
+                        <div class="pool-stat-value">847</div>
+                        <div class="pool-stat-label">Businesses in today's pool</div>
+                    </div>
+                    <div class="pool-stat">
+                        <div class="pool-stat-value">£12.4M</div>
+                        <div class="pool-stat-label">Total pool volume</div>
+                    </div>
+                    <div class="pool-stat">
+                        <div class="pool-stat-value">3:00 PM</div>
+                        <div class="pool-stat-label">Pool closes in 2h 15m</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <button class="cta-button">Learn about business payments</button>
+            </div>
+        </div>
+        
+        <div class="right-side">
+            <div class="payment-card">
+                <div class="input-group">
+                    <label class="input-label">Plan Name</label>
+                    <input type="text" class="text-input" placeholder="e.g., Monthly Supplier Payment" value="Payroll Plan A">
+                </div>
+
+                <div class="transaction-type-section">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="transactionTypeToggle" onchange="toggleTransactionType()">
+                        <span class="checkbox-text">Send money to recipient</span>
+                    </label>
+                    <div style="font-size: 12px; color: #6b7c93; margin-top: 4px; margin-left: 24px;">
+                        Unchecked = Currency conversion only
+                    </div>
+                </div>
+
+                <div class="receiver-section" id="receiverSection" style="display: block;">
+                    <label class="input-label">Select Recipient</label>
+                    <select class="select-input">
+                        <option value="">Choose recipient...</option>
+                        <option value="1" selected>Tech Supplies Ltd - EUR Account</option>
+                        <option value="2">Marketing Agency GmbH</option>
+                        <option value="3">Freelancer - Jan Kowalski</option>
+                        <option value="4">Office Rent - Berlin</option>
+                    </select>
+                </div>
+
+                <div class="rate-guarantee">
+                    Rate guaranteed (24h)
+                </div>
+                <div class="exchange-rate">
+                    1 GBP = 1.1417 EUR
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">You send exactly</label>
+                    <div class="input-field">
+                        <span style="font-size: 20px; font-weight: 500;">2,500</span>
+                        <div class="currency-flag">
+                            🇬🇧 <strong>GBP</strong> <span style="color: #9ca8b4;">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="input-label">Recipient gets</label>
+                    <div class="input-field">
+                        <span style="font-size: 20px; font-weight: 500;">2,845.31</span>
+                        <div class="currency-flag">
+                            🇪🇺 <strong>EUR</strong> <span style="color: #9ca8b4;">▼</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="transaction-frequency-section">
+                    <label class="input-label">Transaction Type</label>
+                    <div class="frequency-toggle">
+                        <button class="frequency-button active" onclick="setFrequency('single', event)">Single Payment</button>
+                        <button class="frequency-button" onclick="setFrequency('recurring', event)">Recurring</button>
+                    </div>
+                    <div id="recurringOptions" style="display: none; margin-top: 12px;">
+                        <select class="select-input">
+                            <option value="weekly">Weekly</option>
+                            <option value="biweekly">Every 2 weeks</option>
+                            <option value="monthly" selected>Monthly</option>
+                            <option value="quarterly">Quarterly</option>
+                        </select>
+                    </div>
+
+                    <div class="deadline-section">
+                        <label class="input-label" style="margin-top: 16px;">Payment Deadline</label>
+                        <input type="datetime-local" class="text-input" value="2025-11-28T15:00">
+                        <div style="font-size: 12px; color: #6b7c93; margin-top: 6px;">
+                            Payment will be executed before this time
+                        </div>
+                    </div>
+                </div>
+
+                <div class="paying-with-section">
+                    <div class="section-label">Paying with</div>
+                    
+                    <div class="payment-method">
+                        <div class="payment-method-left">
+                            <div class="radio-button"></div>
+                            <div class="payment-method-icon">🏦</div>
+                            <div class="payment-method-name">Bank transfer (Direct)</div>
+                        </div>
+                        <a href="#" class="change-link">Change →</a>
+                    </div>
+                    
+                    <div class="payment-method pool-option" onclick="selectPool()">
+                        <div class="payment-method-left">
+                            <div class="radio-button selected"></div>
+                            <div class="payment-method-icon">💎</div>
+                            <div class="pool-method-details">
+                                <div class="pool-method-name">
+                                    Payment Pool
+                                    <span style="background: #00b67a; color: white; padding: 2px 8px; border-radius: 10px; font-size: 10px; font-weight: 700;">RECOMMENDED</span>
+                                </div>
+                                <div class="pool-method-desc">Arrives today by 5 PM • Save £1.50</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="fee-breakdown">
+                    <div class="fee-row">
+                        <span class="fee-label">Bank transfer fee</span>
+                        <span class="fee-value">0 GBP</span>
+                    </div>
+                    <div class="fee-row">
+                        <span class="fee-label">Our fee (0.31% standard)</span>
+                        <span class="fee-value">7.75 GBP</span>
+                    </div>
+
+                    <div class="volume-discount pool-discount">
+                        <span class="fee-label">💎 Pool discount (0.25% rate)</span>
+                        <span class="fee-value">-1.50 GBP →</span>
+                    </div>
+
+                    <div class="fee-row total-fee">
+                        <span class="fee-label">Total included fees (0.25%)</span>
+                        <span class="fee-value">6.25 GBP</span>
+                    </div>
+                </div>
+                
+                <div class="arrival-info">
+                    Should arrive <strong>today by 5:00 PM CET</strong>
+                    <div style="margin-top: 8px; font-size: 13px;">
+                        Pool closes at 3:00 PM (2h 15m remaining) • 847 businesses already joined
+                    </div>
+                </div>
+                
+                <div class="promo-banner">
+                    <div class="promo-icon">🎉</div>
+                    <div class="promo-content">
+                        <h4>You're using Payment Pool - smarter pricing!</h4>
+                        <p>By joining with 847 other businesses, you've unlocked a 0.25% rate and saved £1.50 on this transfer.</p>
+                        <a href="#" class="promo-link">Learn how Payment Pool works →</a>
+                    </div>
+                </div>
+
+                <div class="plan-connection-section">
+                    <label class="input-label">Backup Plan</label>
+                    <select class="select-input" id="backupPlanSelect" onchange="updateBackupPlanDescription()">
+                        <option value="">None - No backup</option>
+                        <option value="receiver_currency" selected>Use Receiver's Currency Balance</option>
+                        <option value="gbp_balance">Use GBP Balance</option>
+                        <option value="usd_balance">Use USD Balance</option>
+                        <option value="eur_balance">Use EUR Balance (Multi-currency Account)</option>
+                    </select>
+                    <div id="backupPlanDescription" style="font-size: 12px; color: #6b7c93; margin-top: 6px;">
+                        If primary payment fails, automatically pay from your EUR multi-currency account
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="cancel-button" onclick="cancelPlan()">Cancel</button>
+                    <button class="approve-button" onclick="approvePlan()">Approve Plan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function selectPool() {
+            // Toggle selection for demo purposes
+            const radios = document.querySelectorAll('.radio-button');
+            radios.forEach(radio => radio.classList.remove('selected'));
+            event.currentTarget.querySelector('.radio-button').classList.add('selected');
+        }
+
+        function toggleTransactionType() {
+            const checkbox = document.getElementById('transactionTypeToggle');
+            const receiverSection = document.getElementById('receiverSection');
+
+            if (checkbox.checked) {
+                receiverSection.style.display = 'block';
+            } else {
+                receiverSection.style.display = 'none';
+            }
+        }
+
+        function setFrequency(type, event) {
+            event.preventDefault();
+            const buttons = document.querySelectorAll('.frequency-button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const recurringOptions = document.getElementById('recurringOptions');
+            if (type === 'recurring') {
+                recurringOptions.style.display = 'block';
+            } else {
+                recurringOptions.style.display = 'none';
+            }
+        }
+
+        function cancelPlan() {
+            if (confirm('Are you sure you want to cancel this plan?')) {
+                alert('Plan cancelled');
+            }
+        }
+
+        function approvePlan() {
+            alert('Plan approved and scheduled for execution!');
+        }
+
+        function updateBackupPlanDescription() {
+            const select = document.getElementById('backupPlanSelect');
+            const description = document.getElementById('backupPlanDescription');
+            const value = select.value;
+
+            const descriptions = {
+                '': 'No backup plan configured',
+                'receiver_currency': 'If primary payment fails, automatically pay from your EUR multi-currency account',
+                'gbp_balance': 'If primary payment fails, automatically pay from your GBP balance',
+                'usd_balance': 'If primary payment fails, automatically pay from your USD multi-currency account',
+                'eur_balance': 'If primary payment fails, automatically pay from your EUR multi-currency account'
+            };
+
+            description.textContent = descriptions[value] || 'No backup plan configured';
+        }
+
+        // Initialize transaction type toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('transactionTypeToggle').checked = true;
+        });
+    </script>
+</body>
+</html>

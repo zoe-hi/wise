@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Plan, PlanStatus } from "../../lib/domain/models";
-import { RuleBuilderModal } from "./RuleBuilderModal";
+import { WisePoolModal } from "./WisePoolModal";
 import { useRole } from "../contexts/RoleContext";
 
 type PlanSummary = {
@@ -177,7 +177,7 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
             </div>
 
             {isNewPlanOpen && (
-                <RuleBuilderModal
+                <WisePoolModal
                     onClose={() => setIsNewPlanOpen(false)}
                     onSave={handlePlanCreated}
                 />

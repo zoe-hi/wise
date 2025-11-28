@@ -9,8 +9,9 @@ import { activityLogs } from "../../lib/storage/memory";
 const ALLOWED_ROLES = ["PLANNER", "OWNER"];
 
 // RBAC helper
-function checkRole(user: User) {
-  if (!ALLOWED_ROLES.includes(user.role)) {
+function checkRole(user: User, allowedRoles?: string[]) {
+  const rolesToCheck = allowedRoles || ALLOWED_ROLES;
+  if (!rolesToCheck.includes(user.role)) {
     throw new Error("Forbidden: insufficient role");
   }
 }
