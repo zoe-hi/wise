@@ -65,7 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
             {/* Main */}
             <div className="main">
-              <div className="topbar">
+              <div className="topbar flex justify-end w-full">
                 <RoleSwitcher />
               </div>
 
