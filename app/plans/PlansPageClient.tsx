@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Plan, PlanStatus } from "../../lib/domain/models";
 import { RuleBuilderModal } from "./RuleBuilderModal";
@@ -56,6 +56,11 @@ const dateTimeFormatter = new Intl.DateTimeFormat("en-GB", {
 
 export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
     const { role } = useRole();
+    const router = useRouter();
+    const handlePlanClick = (planId: string) => {
+        router.push(`/plans/${planId}`);
+    };
+
     const [plans, setPlans] = useState<PlanSummary[]>(
         [...initialPlans].sort(
             (a, b) => new Date(b.convertBy).getTime() - new Date(a.convertBy).getTime()
@@ -135,16 +140,16 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
                                     <tr
                                         key={plan.id}
                                         className="cursor-pointer bg-white transition hover:bg-slate-50"
+                                        onClick={() => handlePlanClick(plan.id)}
                                     >
                                         {/* Plan name cell with Link */}
                                         <td className="px-6 py-4 text-sm font-semibold text-slate-900">
-                                            <Link
-                                                href={`/plans/${plan.id}`}
-                                                className="inline-flex items-center text-slate-900 hover:underline"
+                                            <span
+                                                className="inline-flex items-center text-slate-900"
                                                 aria-label={`View plan ${plan.name}`}
                                             >
                                                 {plan.name}
-                                            </Link>
+                                            </span>
                                         </td>
 
                                         {/* Status cell */}
