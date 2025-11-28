@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payroll Plan A - Payment Details</title>
+    <link href="https://fonts.googleapis.com/css2?family=Averta:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --wise-navy: #00112C;
+            --wise-green: #9FE870;
+            --wise-blue: #2E4369;
+            --wise-gray: #E8EAED;
+            --wise-text: #364153;
+            --wise-light-text: #6C7C8C;
+            --wise-border: #DFE1E6;
+            --wise-hover: #F4F5F7;
+            --wise-success: #00C9A7;
+            --wise-warning: #FFA500;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Averta', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: #F9FAFB;
+            color: var(--wise-text);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        /* Header Section */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .header-left h1 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--wise-navy);
+            margin-bottom: 8px;
+        }
+
+        .header-meta {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            color: var(--wise-light-text);
+            font-size: 14px;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #E7F9F5;
+            color: var(--wise-success);
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--wise-success);
+            border-radius: 50%;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .amount-display {
+            font-size: 40px;
+            font-weight: 700;
+            color: var(--wise-navy);
+            margin-bottom: 4px;
+        }
+
+        .target-currency {
+            color: var(--wise-light-text);
+            font-size: 14px;
+        }
+
+        /* Main Grid */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--wise-border);
+            padding: 24px;
+            animation: fadeInUp 0.5s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .card:nth-child(2) { animation-delay: 0.1s; }
+        .card:nth-child(3) { animation-delay: 0.2s; }
+        .card:nth-child(4) { animation-delay: 0.3s; }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--wise-navy);
+        }
+
+        .card-subtitle {
+            color: var(--wise-light-text);
+            font-size: 14px;
+            margin-top: 4px;
+        }
+
+
+
+        /* Payment Flow */
+        .payment-flow {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        /* Schedule Info */
+        .schedule-info {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .schedule-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--wise-gray);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .schedule-row:hover {
+            background: #E0E2E5;
+        }
+
+        .schedule-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--wise-text);
+            font-weight: 600;
+        }
+
+        .label-icon {
+            font-size: 18px;
+        }
+
+        .schedule-value {
+            color: var(--wise-navy);
+            font-weight: 600;
+            text-align: right;
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: var(--wise-success);
+            font-weight: 600;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .btn-link:hover {
+            background: rgba(159, 232, 112, 0.1);
+        }
+
+        /* Upcoming Payments List */
+        .upcoming-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .upcoming-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 2px solid var(--wise-border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upcoming-item:hover {
+            border-color: var(--wise-green);
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0, 17, 44, 0.06);
+        }
+
+        .upcoming-item.active {
+            background: linear-gradient(135deg, #FFF9E6 0%, #FFFDF5 100%);
+            border-color: #FFE066;
+        }
+
+        .upcoming-date {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 2px solid var(--wise-border);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .upcoming-item.active .upcoming-date {
+            background: var(--wise-green);
+            border-color: var(--wise-green);
+        }
+
+        .date-day {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--wise-navy);
+            line-height: 1;
+        }
+
+        .date-month {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--wise-light-text);
+            text-transform: uppercase;
+        }
+
+        .upcoming-item.active .date-month {
+            color: var(--wise-navy);
+        }
+
+        .upcoming-content {
+            flex: 1;
+        }
+
+        .upcoming-title {
+            font-weight: 600;
+            color: var(--wise-navy);
+            margin-bottom: 4px;
+        }
+
+        .upcoming-description {
+            font-size: 14px;
+            color: var(--wise-light-text);
+        }
+
+        .upcoming-amount {
+            text-align: right;
+        }
+
+        .amount-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--wise-navy);
+            margin-bottom: 4px;
+        }
+
+        .amount-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: #FFF3CD;
+            color: #856404;
+        }
+
+        .status-scheduled {
+            background: #E7F9F5;
+            color: var(--wise-success);
+        }
+
+        .status-completed {
+            background: #E7F9F5;
+            color: var(--wise-success);
+        }
+
+        .view-all-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            background: var(--wise-hover);
+            border: none;
+            border-radius: 8px;
+            color: var(--wise-navy);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .view-all-btn:hover {
+            background: var(--wise-gray);
+        }
+
+        /* History List */
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .history-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border: 1px solid var(--wise-border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .history-item:hover {
+            border-color: var(--wise-success);
+            box-shadow: 0 2px 8px rgba(0, 201, 167, 0.1);
+        }
+
+        .history-date {
+            width: 50px;
+            height: 50px;
+            background: var(--wise-gray);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .history-item .date-day {
+            font-size: 20px;
+        }
+
+        .history-content {
+            flex: 1;
+        }
+
+        .history-title {
+            font-weight: 600;
+            color: var(--wise-navy);
+            margin-bottom: 4px;
+        }
+
+        .history-description {
+            font-size: 14px;
+            color: var(--wise-light-text);
+        }
+
+        .history-amount {
+            text-align: right;
+        }
+
+        .history-amount .amount-value {
+            font-size: 16px;
+        }
+
+        /* Details List */
+        .details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--wise-border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .detail-label {
+            color: var(--wise-light-text);
+            font-size: 14px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--wise-navy);
+            text-align: right;
+        }
+
+        .detail-value.highlight {
+            color: var(--wise-success);
+        }
+
+        /* Fee Breakdown */
+        .fee-breakdown {
+            background: #F4F5F7;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .fee-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .fee-row:last-child {
+            margin-bottom: 0;
+            padding-top: 12px;
+            border-top: 2px solid var(--wise-border);
+            font-weight: 700;
+        }
+
+        .fee-label {
+            color: var(--wise-text);
+            font-size: 14px;
+        }
+
+        .fee-value {
+            color: var(--wise-text);
+            font-weight: 600;
+        }
+
+        .savings-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            background: #E7F9F5;
+            color: var(--wise-success);
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        /* Pool Info */
+        .pool-info {
+            background: linear-gradient(135deg, #00112C 0%, #2E4369 100%);
+            border-radius: 12px;
+            padding: 24px;
+            color: white;
+        }
+
+        .pool-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .pool-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(159, 232, 112, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .pool-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .pool-stat {
+            text-align: center;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .pool-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .pool-stat-label {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+
+        .pool-notice {
+            margin-top: 16px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        /* Activity Log */
+        .activity-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--wise-border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--wise-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--wise-navy);
+            flex-shrink: 0;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            color: var(--wise-navy);
+            margin-bottom: 4px;
+        }
+
+        .activity-description {
+            font-size: 14px;
+            color: var(--wise-light-text);
+        }
+
+        .activity-time {
+            font-size: 13px;
+            color: var(--wise-light-text);
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--wise-green);
+            color: var(--wise-navy);
+        }
+
+        .btn-primary:hover {
+            background: #8FD860;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(159, 232, 112, 0.3);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--wise-navy);
+            border: 2px solid var(--wise-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--wise-navy);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: white;
+            color: #DC3545;
+            border: 2px solid #DC3545;
+        }
+
+        .btn-danger:hover {
+            background: #DC3545;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* Exchange Rate Display */
+        .exchange-rate {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: #FFF9E6;
+            border: 1px solid #FFE066;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+
+        .exchange-icon {
+            font-size: 24px;
+        }
+
+        .exchange-text {
+            flex: 1;
+        }
+
+        .exchange-value {
+            font-weight: 700;
+            color: var(--wise-navy);
+            font-size: 16px;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .amount-display {
+                font-size: 32px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 20px 16px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .header-right {
+                text-align: left;
+                width: 100%;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .pool-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-left">
+                <h1>Payroll Plan A</h1>
+                <div class="header-meta">
+                    <span class="status-badge">
+                        <span class="status-dot"></span>
+                        Active
+                    </span>
+                    <span>Created 28 Nov 2025, 16:10</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="amount-display">€2,500</div>
+                <div class="target-currency">Net amount (EUR)</div>
+            </div>
+        </div>
+
+        <!-- Main Grid -->
+        <div class="main-grid">
+            <!-- Left Column -->
+            <div>
+                <!-- Schedule Overview -->
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">Payment Schedule</div>
+                            <div class="card-subtitle">Recurring monthly payroll</div>
+                        </div>
+                        <button class="btn-link">Edit schedule</button>
+                    </div>
+
+                    <div class="schedule-info">
+                        <div class="schedule-row">
+                            <div class="schedule-label">
+                                <span class="label-icon">📅</span>
+                                Frequency
+                            </div>
+                            <div class="schedule-value">Monthly • Last business day</div>
+                        </div>
+                        <div class="schedule-row">
+                            <div class="schedule-label">
+                                <span class="label-icon">💰</span>
+                                Amount per payment
+                            </div>
+                            <div class="schedule-value">£2,500.00 GBP → €2,845.31 EUR</div>
+                        </div>
+                        <div class="schedule-row">
+                            <div class="schedule-label">
+                                <span class="label-icon">👤</span>
+                                Recipient
+                            </div>
+                            <div class="schedule-value">Tech Supplies Ltd - EUR Account</div>
+                        </div>
+                        <div class="schedule-row">
+                            <div class="schedule-label">
+                                <span class="label-icon">🔄</span>
+                                Conversion method
+                            </div>
+                            <div class="schedule-value">Payment Pool (saves ~£1.50 per payment)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Payments -->
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-header">
+                        <div class="card-title">Upcoming Payments</div>
+                    </div>
+                    
+                    <div class="upcoming-list">
+                        <div class="upcoming-item active">
+                            <div class="upcoming-date">
+                                <div class="date-day">28</div>
+                                <div class="date-month">Nov</div>
+                            </div>
+                            <div class="upcoming-content">
+                                <div class="upcoming-title">Next payment</div>
+                                <div class="upcoming-description">Due by 3:00 PM today</div>
+                            </div>
+                            <div class="upcoming-amount">
+                                <div class="amount-value">€2,845.31</div>
+                                <div class="amount-status status-pending">Pending</div>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-item">
+                            <div class="upcoming-date">
+                                <div class="date-day">31</div>
+                                <div class="date-month">Dec</div>
+                            </div>
+                            <div class="upcoming-content">
+                                <div class="upcoming-title">December payroll</div>
+                                <div class="upcoming-description">Scheduled for month-end</div>
+                            </div>
+                            <div class="upcoming-amount">
+                                <div class="amount-value">€2,845.31</div>
+                                <div class="amount-status status-scheduled">Scheduled</div>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-item">
+                            <div class="upcoming-date">
+                                <div class="date-day">31</div>
+                                <div class="date-month">Jan</div>
+                            </div>
+                            <div class="upcoming-content">
+                                <div class="upcoming-title">January payroll</div>
+                                <div class="upcoming-description">Scheduled for month-end</div>
+                            </div>
+                            <div class="upcoming-amount">
+                                <div class="amount-value">€2,845.31</div>
+                                <div class="amount-status status-scheduled">Scheduled</div>
+                            </div>
+                        </div>
+
+                        <div class="upcoming-item">
+                            <div class="upcoming-date">
+                                <div class="date-day">28</div>
+                                <div class="date-month">Feb</div>
+                            </div>
+                            <div class="upcoming-content">
+                                <div class="upcoming-title">February payroll</div>
+                                <div class="upcoming-description">Scheduled for month-end</div>
+                            </div>
+                            <div class="upcoming-amount">
+                                <div class="amount-value">€2,845.31</div>
+                                <div class="amount-status status-scheduled">Scheduled</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="view-all-btn">View all scheduled payments →</button>
+                </div>
+
+                <!-- Payment History -->
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-header">
+                        <div class="card-title">Payment History</div>
+                    </div>
+                    
+                    <div class="history-list">
+                        <div class="history-item">
+                            <div class="history-date">
+                                <div class="date-day">31</div>
+                                <div class="date-month">Oct</div>
+                            </div>
+                            <div class="history-content">
+                                <div class="history-title">October payroll</div>
+                                <div class="history-description">Completed successfully</div>
+                            </div>
+                            <div class="history-amount">
+                                <div class="amount-value">€2,798.45</div>
+                                <div class="amount-status status-completed">✓ Completed</div>
+                            </div>
+                        </div>
+
+                        <div class="history-item">
+                            <div class="history-date">
+                                <div class="date-day">30</div>
+                                <div class="date-month">Sep</div>
+                            </div>
+                            <div class="history-content">
+                                <div class="history-title">September payroll</div>
+                                <div class="history-description">Completed successfully</div>
+                            </div>
+                            <div class="history-amount">
+                                <div class="amount-value">€2,812.33</div>
+                                <div class="amount-status status-completed">✓ Completed</div>
+                            </div>
+                        </div>
+
+                        <div class="history-item">
+                            <div class="history-date">
+                                <div class="date-day">31</div>
+                                <div class="date-month">Aug</div>
+                            </div>
+                            <div class="history-content">
+                                <div class="history-title">August payroll</div>
+                                <div class="history-description">Completed successfully</div>
+                            </div>
+                            <div class="history-amount">
+                                <div class="amount-value">€2,789.12</div>
+                                <div class="amount-status status-completed">✓ Completed</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="view-all-btn">View full payment history →</button>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div>
+                <!-- Next Payment Details -->
+                <div class="card">
+                    <div class="card-title" style="margin-bottom: 16px;">Next Payment Details</div>
+                    
+                    <div class="details-list">
+                        <div class="detail-row">
+                            <span class="detail-label">Payment deadline</span>
+                            <span class="detail-value">Today, 3:00 PM</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Expected arrival</span>
+                            <span class="detail-value highlight">Today by 5:00 PM CET</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Exchange rate</span>
+                            <span class="detail-value">1 GBP = 1.1417 EUR</span>
+                        </div>
+                        <div class="detail-row">
+                            <span class="detail-label">Backup plan</span>
+                            <span class="detail-value">Currency Balance</span>
+                        </div>
+                    </div>
+
+                    <div class="fee-breakdown">
+                        <div class="fee-row">
+                            <span class="fee-label">Transfer amount</span>
+                            <span class="fee-value">£2,500.00</span>
+                        </div>
+                        <div class="fee-row">
+                            <span class="fee-label">Fee (0.25%)</span>
+                            <span class="fee-value">£6.25</span>
+                        </div>
+                        <div class="fee-row">
+                            <span class="fee-label">
+                                Pool savings 
+                                <span class="savings-badge">💰 vs direct</span>
+                            </span>
+                            <span class="fee-value" style="color: var(--wise-success);">-£1.50</span>
+                        </div>
+                        <div class="fee-row">
+                            <span class="fee-label">Total cost</span>
+                            <span class="fee-value">£2,506.25</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Pool Info -->
+                <div class="pool-info" style="margin-top: 24px;">
+                    <div class="pool-header">
+                        <div class="pool-icon">💎</div>
+                        <div>
+                            <div style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Payment Pool Active</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Collaborative currency exchange</div>
+                        </div>
+                    </div>
+                    
+                    <div class="pool-stats">
+                        <div class="pool-stat">
+                            <div class="pool-stat-value">317</div>
+                            <div class="pool-stat-label">Businesses</div>
+                        </div>
+                        <div class="pool-stat">
+                            <div class="pool-stat-value">£12.4M</div>
+                            <div class="pool-stat-label">Volume</div>
+                        </div>
+                        <div class="pool-stat">
+                            <div class="pool-stat-value">2h 15m</div>
+                            <div class="pool-stat-label">Until 3 PM</div>
+                        </div>
+                    </div>
+
+                    <div class="pool-notice">
+                        Pool closes at 3:00 PM • Resets daily
+                    </div>
+                </div>
+
+                <!-- Plan Insights -->
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-title" style="margin-bottom: 16px;">Plan Insights</div>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 16px;">
+                        <div style="padding: 12px; background: #E7F9F5; border-radius: 8px;">
+                            <div style="font-size: 13px; color: var(--wise-light-text); margin-bottom: 4px;">Total saved with Pool</div>
+                            <div style="font-size: 24px; font-weight: 700; color: var(--wise-success);">£4.50</div>
+                            <div style="font-size: 12px; color: var(--wise-light-text); margin-top: 4px;">Last 3 payments</div>
+                        </div>
+
+                        <div style="padding: 12px; background: var(--wise-gray); border-radius: 8px;">
+                            <div style="font-size: 13px; color: var(--wise-light-text); margin-bottom: 4px;">Avg. exchange rate</div>
+                            <div style="font-size: 20px; font-weight: 700; color: var(--wise-navy);">1.1398 EUR</div>
+                            <div style="font-size: 12px; color: var(--wise-light-text); margin-top: 4px;">Over last 3 months</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="card" style="margin-top: 24px;">
+                    <div class="card-title" style="margin-bottom: 16px;">Quick Actions</div>
+                    
+                    <div class="action-buttons" style="flex-direction: column; margin: 0;">
+                        <button class="btn btn-primary">
+                            <span>✓</span>
+                            Execute Next Payment
+                        </button>
+                        <button class="btn btn-secondary">
+                            <span>✏️</span>
+                            Edit Schedule
+                        </button>
+                        <button class="btn btn-secondary">
+                            <span>⏸</span>
+                            Skip Next Payment
+                        </button>
+                        <button class="btn btn-secondary">
+                            <span>📊</span>
+                            Export Report
+                        </button>
+                        <button class="btn btn-danger">
+                            <span>⏹</span>
+                            Stop Plan
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Info Box -->
+                <div class="card" style="margin-top: 24px; background: #F4F5F7; border: none;">
+                    <div style="font-size: 14px; color: var(--wise-light-text); line-height: 1.6;">
+                        <strong style="color: var(--wise-navy); display: block; margin-bottom: 8px;">ℹ️ About this plan</strong>
+                        This recurring plan handles monthly payroll payments. Future payments can be edited individually or as a batch. Only an Owner can stop the entire plan.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scroll animations when elements come into view
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add click handlers for buttons (demo purposes)
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.textContent.trim();
+                console.log(`Action clicked: ${action}`);
+                
+                // Add a subtle feedback animation
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
