@@ -1,21 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-import Link from 'next/link';
-import Image from 'next/image';
-import { SvgIcon } from './components/SvgIcon';
-import { RoleProvider } from "./contexts/RoleContext";
-import { RoleSwitcher } from "./components/RoleSwitcher";
-
-const navItems = [
-  { name: 'Home', href: '/', path: 'M3 12h18' },
-  { name: 'Cards', href: '/', path: 'M3 10h18M7 15h1m4 0h1m-7-4h12a3 3 0 003-3V6a3 3 0 00-3-3H6a3 3 0 00-3 3v5a3 3 0 003 3z' },
-  { name: 'Transactions', href: '/', path: 'M15 15l-2 5L9 9l11 4-5 2z' },
-  { name: 'Team', href: '/', path: 'M17 20v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2m8-10a4 4 0 100-8 4 4 0 000 8z' },
-  { name: 'Recipients', href: '/', path: 'M18 10a8 8 0 10-16 0 8 8 0 0016 0zm-8 4v-4m0 0h4m-4 0v4m0-4h-4' },
-  { name: 'Insights', href: '/', path: 'M9 19V6l12-3v13M9 19c-3.866 0-7-1.343-7-3s3.134-3 7-3 7 1.343 7 3-3.134 3-7 3zm0 0v-4' },
-];
+import LayoutWrapper from "./layoutWrapper";
+import { LayoutContextProvider } from "./contexts/LayoutContextProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,55 +29,9 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <RoleProvider>
-          <div className="flex h-screen bg-gray-100">
-
-            {/* 1. Sidebar */}
-            <aside className="w-64 bg-white border-r border-gray-200 flex flex-col p-4">
-              <div className="mb-8">
-                <SvgIcon path="M10 20l-6-6 6-6M4 14h14" className="w-8 h-8 text-green-700 inline-block mr-2" />
-                <span className="text-2xl font-bold text-green-700">wise</span>
-              </div>
-
-              <nav className="space-y-1">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className="flex items-center space-x-3 p-3 text-gray-600 hover:bg-gray-50 rounded-lg cursor-pointer transition"
-                  >
-                    <SvgIcon path={item.path} />
-                    <span>{item.name}</span>
-                  </Link>
-                ))}
-                <Link
-                  href="/plans"
-                  className="flex items-center space-x-3 p-3 text-gray-600 hover:bg-gray-200 rounded-lg cursor-pointer font-bold"
-                >
-                  <div className="w-6 h-6 relative flex items-center justify-center">
-                    <Image
-                      src="/exchange.png"
-                      alt="Currency Exchange Icon"
-                      width={24}
-                      height={24}
-                    />
-                  </div>
-                  <span>Convert Wisely</span>
-                </Link>
-              </nav>
-            </aside>
-            {/* Top Bar / Profile Placeholder */}
-            <div className="flex-1 overflow-y-auto">
-              <div className="sticky top-0 z-10 bg-gray-100 pt-8 pb-4 px-8">
-                <div className="flex justify-end">
-                  <RoleSwitcher />
-                </div>
-              </div>
-
-              {children}
-            </div>
-          </div>
-        </RoleProvider>
+        <LayoutContextProvider>
+          <LayoutWrapper>{children}</LayoutWrapper>
+        </LayoutContextProvider>
       </body>
     </html>
   );

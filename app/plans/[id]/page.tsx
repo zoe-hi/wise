@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { SetBackPath } from "../../components/SetBackPath";
 import {
   getPlanDetailAction,
   getPlanActivityAction,
@@ -41,63 +42,66 @@ export default async function PlanDetailPage({ params }: PageProps) {
   const amountFormatter = currencyFormatter(plan.targetCurrency);
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-16">
-      <div className="mx-auto max-w-6xl px-6 pt-12">
-        <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold text-slate-900">
-              {plan.name}
-            </h1>
-            <p className="mt-2 text-sm text-slate-600">
-              Convert by {dateTimeFormatter.format(new Date(plan.convertBy))}
-            </p>
-          </div>
-          <div className="text-right">
-            <p className="text-sm text-slate-600">Net amount</p>
-            <p className="text-2xl font-semibold text-slate-900">
-              {amountFormatter.format(plan.netAmount)}
-            </p>
-            <p className="text-xs text-slate-500">
-              Target currency: {plan.targetCurrency}
-            </p>
-          </div>
-        </header>
+    <>
+      <SetBackPath path="/plans" />
+      <div className="min-h-screen bg-slate-50 pb-16">
+        <div className="mx-auto max-w-6xl px-6 pt-12">
+          <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-3xl font-semibold text-slate-900">
+                {plan.name}
+              </h1>
+              <p className="mt-2 text-sm text-slate-600">
+                Convert by {dateTimeFormatter.format(new Date(plan.convertBy))}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm text-slate-600">Net amount</p>
+              <p className="text-2xl font-semibold text-slate-900">
+                {amountFormatter.format(plan.netAmount)}
+              </p>
+              <p className="text-xs text-slate-500">
+                Target currency: {plan.targetCurrency}
+              </p>
+            </div>
+          </header>
 
-        <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-base font-semibold text-slate-900">
-            Netting summary
-          </h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            <SummaryItem
-              label="Gross need"
-              value={amountFormatter.format(plan.grossAmount)}
-            />
-            <SummaryItem
-              label="Existing balance"
-              value={amountFormatter.format(plan.existingBalance)}
-            />
-            <SummaryItem
-              label="Expected inflows"
-              value={amountFormatter.format(plan.expectedInflows)}
-            />
-            <SummaryItem
-              label="Net to convert"
-              value={amountFormatter.format(plan.netAmount)}
-              emphasis
+          <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 className="text-base font-semibold text-slate-900">
+              Netting summary
+            </h2>
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <SummaryItem
+                label="Gross need"
+                value={amountFormatter.format(plan.grossAmount)}
+              />
+              <SummaryItem
+                label="Existing balance"
+                value={amountFormatter.format(plan.existingBalance)}
+              />
+              <SummaryItem
+                label="Expected inflows"
+                value={amountFormatter.format(plan.expectedInflows)}
+              />
+              <SummaryItem
+                label="Net to convert"
+                value={amountFormatter.format(plan.netAmount)}
+                emphasis
+              />
+            </div>
+          </section>
+
+          <div className="mb-6">
+            <PlanDetailClient
+              plan={plan}
+              steps={steps}
+              activity={activity}
+              approvalThreshold={settings.approvalThreshold}
             />
           </div>
-        </section>
-
-        <div className="mb-6">
-          <PlanDetailClient
-            plan={plan}
-            steps={steps}
-            activity={activity}
-            approvalThreshold={settings.approvalThreshold}
-          />
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
