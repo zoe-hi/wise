@@ -22,13 +22,7 @@
   justify-content: center;
   height: 80px;
   margin-bottom: 10px;
-  padding: 0 20px;
-}
-
-.sidebar-logo-text {
-  color: hsl(150, 90%, 25%); /* slightly softer green than Tailwind’s green-700 */
-  font-size: 1.8rem;
-  font-weight: 700;
+  padding: 2rem 20px;
 }
 
 .logo-img {
@@ -51,7 +45,7 @@
   align-items: center;
 
   padding: 12px 18px;
-  margin: 1px 12px;
+  margin: 1px 1rem;
   cursor: pointer;
 
   border-radius: 30px; /* pill style */
