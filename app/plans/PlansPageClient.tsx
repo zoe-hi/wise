@@ -82,7 +82,7 @@ export function PlansPageClient({ initialPlans }: PlansPageClientProps) {
                 <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-3xl font-semibold text-slate-900">
-                            Convert plans
+                            Plans
                         </h1>
                         <p className="mt-2 text-sm text-slate-600">
                             Track your planned conversions and their deadlines in one place.
